@@ -1,0 +1,86 @@
+.container {
+  width: 90vw;
+  max-width: 900px;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bodyContainer {
+  background: var(--bg-container);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  padding: 4px 0px;
+  color: var(--text-color-primary);
+}
+.innerContainer {
+  margin: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  height: 48px;
+}
+
+.image {
+  flex: 1;
+  max-width: 48px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.image > svg {
+  width: 36px;
+  height: 36px;
+}
+
+.sender {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.name {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.date {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  color: var(--naked-text-color);
+  font-style: italic;
+  font-size: 13px;
+}
+
+.content {
+  min-height: 32px;
+  margin-top: 12px;
+  padding: 0px 12px;
+}
+
+.callLog {
+  color: var(--naked-text-color);
+  width: 90vw;
+  max-width: 900px;
+  margin-top: 12px;
+  font-size: 14px;
+  height: 32px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 12px;
+}
+
+.callLog > svg {
+  margin-right: 8px;
+}
+
+.callLog > span {
+  margin-left: 8px;
+  margin-top: 3px;
+}

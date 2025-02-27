@@ -1,0 +1,33 @@
+.light {
+  --bg-color: #efefef;
+  --bg-container: #fff;
+  --border-color: #1e1e24;
+  --bg-focus-element: #ddb394;
+  --text-color-primary: #1c2826;
+  --text-color-secondary: #3a4644;
+  --naked-text-color: #3a4644;
+
+  --btn-main-bg: #e7e5e5;
+  --btn-light-bg: #e2dfdf;
+
+  --color-info: #7284a8;
+  --color-success: #06d6a0;
+  --color-danger: #ef476f;
+}
+
+.dark {
+  --bg-color: #1e1e24;
+  --bg-container: #2e2e38;
+  --border-color: #454541;
+  --bg-focus-element: #53534f;
+  --text-color-primary: #fff8f0;
+  --text-color-secondary: #fff8f0;
+  --naked-text-color: #c3bcb4;
+
+  --btn-main-bg: #373f51;
+  --btn-light-bg: #4a556d;
+
+  --color-info: #7284a8;
+  --color-success: #06d6a0;
+  --color-danger: #ef476f;
+}

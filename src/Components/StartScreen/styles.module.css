@@ -1,0 +1,15 @@
+.container {
+  color: var(--text-color-primary);
+  width: 90vw;
+  max-width: 900px;
+  height: calc(100vh - 150px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container > div {
+  border-radius: var(--border-radius-md);
+  background: var(--bg-container);
+  padding: 12px 18px;
+}
