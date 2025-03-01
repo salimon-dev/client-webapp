@@ -1,6 +1,20 @@
 body {
   margin: 0px;
 }
-span {
-  --default-font-family: "Vazirmatn" !important;
+.radix-themes {
+  --default-font-family: "Vazirmatn";
+  --cursor-button: pointer;
+}
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar:hover {
+  width: 8px;
+}
+/* ::-webkit-scrollbar-track {
+} */
+::-webkit-scrollbar-thumb {
+  background: var(--accent-8);
+  border-radius: 4px;
+  /* border-radius: var(--border-radius-md); */
 }

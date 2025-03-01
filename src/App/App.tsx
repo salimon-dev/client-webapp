@@ -11,21 +11,21 @@ export default function App() {
   const [phase, setPhase] = useState<"init" | "guest" | "member">("init");
   const isLoggedIn = useIsLoggedIn();
 
-  // useEffect(() => {
-  //   setupStorage().then((result) => {
-  //     if (result) {
-  //       setPhase("member");
-  //     } else {
-  //       setPhase("guest");
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    setupStorage().then((result) => {
+      if (result) {
+        setPhase("member");
+      } else {
+        setPhase("guest");
+      }
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     setPhase("member");
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    if (isLoggedIn) {
+      setPhase("member");
+    }
+  }, [isLoggedIn]);
 
   if (phase === "init")
     return (
@@ -51,7 +51,7 @@ export default function App() {
 export function ThemeStage({ children }: { children: JSX.Element }) {
   const theme = useAtomValue(themeModeAtom);
   return (
-    <Theme appearance={theme} accentColor="gray">
+    <Theme appearance={theme} accentColor="blue">
       {children}
     </Theme>
   );

@@ -1,6 +1,6 @@
 export default function ThemeIcon() {
   return (
-    <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" style={{ fill: "var(--accent-12)" }}>
+    <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none">
       <g>
         <path
           style={{ stroke: "var(--accent-12)" }}

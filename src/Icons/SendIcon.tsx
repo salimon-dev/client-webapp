@@ -1,7 +1,12 @@
-export default function SendIcon() {
+import { CSSProperties } from "react";
+
+interface IProps {
+  style?: CSSProperties;
+}
+export default function SendIcon({ style }: IProps) {
   return (
     <svg
-      style={{ fill: "var(--accent-12)" }}
+      style={{ fill: "var(--accent-12)", ...style }}
       version="1.1"
       viewBox="0 0 24 24"
       xmlSpace="preserve"
