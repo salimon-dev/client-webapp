@@ -1,49 +1,21 @@
-import { ReactNode, useEffect, useState } from "react";
-import Styles from "./styles.module.css";
-interface IProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  actions: { title: string; key: string; onClick: () => void }[];
-  children?: ReactNode;
-}
-export default function Dialog({ open, onClose, title, actions, children }: IProps) {
-  const [show, setShow] = useState(false);
-  const [opacity, setOpacity] = useState(0);
-  useEffect(() => {
-    if (open) {
-      setShow(true);
-      setTimeout(() => setOpacity(1), 40);
-    } else {
-      setOpacity(0);
-      setTimeout(() => {
-        setShow(false);
-      }, 325);
-    }
-  }, [open]);
+import { Dialog as RDialog } from "@radix-ui/themes";
+import { JSX } from "react";
 
-  if (!show) return;
+interface IProps {
+  title: string;
+  description: string;
+  trigger: JSX.Element;
+  children: JSX.Element;
+}
+export default function Dialog({ title, description, trigger, children }: IProps) {
   return (
-    <div className={Styles.overlay} style={{ opacity: opacity }} onClick={onClose}>
-      <div
-        className={Styles.container}
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-      >
-        <div className={Styles.header}>
-          <span className={Styles.title}>{title}</span>
-          <img src="/close.svg" alt="close" className={Styles.closeBtn} onClick={onClose} />
-        </div>
-        <div className={Styles.content}>{children}</div>
-        <div className={Styles.footer}>
-          {actions.map((item) => (
-            <button onClick={item.onClick} key={item.key}>
-              {item.title}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
+    <RDialog.Root>
+      <RDialog.Trigger>{trigger}</RDialog.Trigger>
+      <RDialog.Content maxWidth="450px">
+        <RDialog.Title>{title}</RDialog.Title>
+        <RDialog.Description>{description}</RDialog.Description>
+        {children}
+      </RDialog.Content>
+    </RDialog.Root>
   );
 }

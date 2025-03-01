@@ -1,8 +1,8 @@
 import { Box, Container, Flex } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
-import Header from "./Components/Header";
-import SendBox from "./Components/SendBox";
-import Content from "./Components/Content";
+import Header from "@components/Header/Header";
+import Content from "@components/Content/Content";
+import Footer from "@components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
           <Content />
         </Box>
         <Box className={Styles.footer}>
-          <SendBox />
+          <Footer />
         </Box>
       </Flex>
     </Container>

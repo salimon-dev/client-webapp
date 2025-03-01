@@ -3,7 +3,8 @@ import Styles from "./styles.module.css";
 import LogoIcon from "@icons/LogoIcon";
 import UserIcon from "@icons/UserIcon";
 import ThemeIcon from "@icons/ThemeIcon";
-import { store, themeModeAtom } from "@providers/store";
+import { toggleThemeWithStorage } from "@providers/storage";
+import Dialog from "@components/Dialog/Dialog";
 
 export default function Header() {
   return (
@@ -12,24 +13,19 @@ export default function Header() {
         <LogoIcon style={{ height: 32, width: 32 }} />
       </Box>
       {/* <Box className={Styles.headerItem}>new</Box> */}
-      <Button variant="soft" className={Styles.headerItem}>
-        <UserIcon />
-      </Button>
-      <Button
-        variant="soft"
-        className={Styles.headerItem}
-        onClick={() => {
-          const theme = store.get(themeModeAtom);
-          switch (theme) {
-            case "dark":
-              store.set(themeModeAtom, "light");
-              break;
-            case "light":
-            default:
-              store.set(themeModeAtom, "dark");
-          }
-        }}
+
+      <Dialog
+        title="profile"
+        description="you can view and manage your profile here"
+        trigger={
+          <Button variant="soft" className={Styles.headerItem}>
+            <UserIcon />
+          </Button>
+        }
       >
+        <div>some profile</div>
+      </Dialog>
+      <Button variant="soft" className={Styles.headerItem} onClick={toggleThemeWithStorage}>
         <ThemeIcon />
       </Button>
       {/* <Box className={Styles.headerItem}>history</Box>

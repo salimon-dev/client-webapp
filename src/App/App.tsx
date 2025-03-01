@@ -4,8 +4,9 @@ import GuestRoutes from "./GuestRoutes";
 import { JSX, useEffect, useState } from "react";
 import { Theme } from "@radix-ui/themes";
 import { useAtomValue } from "jotai";
-import { setupStorage, themeModeAtom } from "@providers/store";
+import { themeModeAtom } from "@providers/store";
 import Splash from "@components/Splash/Splash";
+import { setupStorage } from "@providers/storage";
 
 export default function App() {
   const [phase, setPhase] = useState<"init" | "guest" | "member">("init");

@@ -40,6 +40,9 @@
       "@specs/*": [
         "./Specs/*"
       ],
+      "@helpers/*": [
+        "./Helpers/*"
+      ],
     }
   },
   "include": [

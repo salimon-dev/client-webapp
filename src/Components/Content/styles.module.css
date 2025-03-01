@@ -1,0 +1,6 @@
+.content {
+  height: calc(100vh - 128px);
+  padding: 30px 24px;
+  box-sizing: border-box;
+  overflow: auto;
+}

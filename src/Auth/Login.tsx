@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
-import { setStorage } from "@providers/store";
+import { setStorage } from "@providers/storage";
 import { login } from "@rest/auth";
 
 export default function Login() {
