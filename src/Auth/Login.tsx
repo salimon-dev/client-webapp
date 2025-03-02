@@ -7,11 +7,12 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
-import { setStorage } from "@providers/storage";
-import { login } from "@rest/auth";
+import { useAtomValue } from "jotai";
+import { nexusAtom } from "@providers/store";
 
 export default function Login() {
   const navigate = useNavigate();
+  const nexus = useAtomValue(nexusAtom);
   const [error, setError] = useState<string>();
   const formik = useFormik({
     validationSchema: yup.object({
@@ -24,13 +25,11 @@ export default function Login() {
     },
     onSubmit: async function (values) {
       setError(undefined);
-      const response = await login(values);
+      const response = await nexus.login(values);
+      if (!response) return;
       if (response.status === 401) {
         setError("username or password are incorrect");
         return;
-      }
-      if (response.status === 200) {
-        setStorage(response.data);
       }
     },
   });

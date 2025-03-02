@@ -43,6 +43,9 @@
       "@helpers/*": [
         "./Helpers/*"
       ],
+      "@nexus/*": [
+        "./Nexus/*"
+      ],
     }
   },
   "include": [

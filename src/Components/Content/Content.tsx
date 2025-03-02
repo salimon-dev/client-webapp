@@ -16,10 +16,6 @@ export default function Content() {
     <Flex direction="column-reverse" className={Styles.content} gap="3">
       <Message message={dummyMessage} />
       <Message message={dummyMessage} />
-      <Message message={dummyMessage} />
-      <Message message={dummyMessage} />
-      <Message message={dummyMessage} />
-      <Message message={dummyMessage} />
     </Flex>
   );
 }

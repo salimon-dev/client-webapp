@@ -1,59 +1,31 @@
-import { useIsLoggedIn } from "@providers/auth";
-import AuthRoutes from "./AuthRoutes";
-import GuestRoutes from "./GuestRoutes";
-import { JSX, useEffect, useState } from "react";
 import { Theme } from "@radix-ui/themes";
 import { useAtomValue } from "jotai";
 import { themeModeAtom } from "@providers/store";
 import Splash from "@components/Splash/Splash";
-import { setupStorage } from "@providers/storage";
+import AuthRoutes from "./AuthRoutes";
+import GuestRoutes from "./GuestRoutes";
+import { useIsConnectedToNexus, useIsLoggedInToNexus } from "@nexus/hooks";
 
-export default function App() {
-  const [phase, setPhase] = useState<"init" | "guest" | "member">("init");
-  const isLoggedIn = useIsLoggedIn();
+export function Phases() {
+  const isConnectedToNexus = useIsConnectedToNexus();
+  const isLoggedIn = useIsLoggedInToNexus();
 
-  useEffect(() => {
-    setupStorage().then((result) => {
-      if (result) {
-        setPhase("member");
-      } else {
-        setPhase("guest");
-      }
-    });
-  }, []);
+  if (!isConnectedToNexus) {
+    return <Splash status="connecting to nexus" />;
+  }
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setPhase("member");
-    }
-  }, [isLoggedIn]);
-
-  if (phase === "init")
-    return (
-      <ThemeStage>
-        <Splash status="loading..." />
-      </ThemeStage>
-    );
   if (isLoggedIn) {
-    return (
-      <ThemeStage>
-        <AuthRoutes />
-      </ThemeStage>
-    );
+    return <AuthRoutes />;
   } else {
-    return (
-      <ThemeStage>
-        <GuestRoutes />
-      </ThemeStage>
-    );
+    return <GuestRoutes />;
   }
 }
 
-export function ThemeStage({ children }: { children: JSX.Element }) {
+export default function App() {
   const theme = useAtomValue(themeModeAtom);
   return (
     <Theme appearance={theme} accentColor="blue">
-      {children}
+      <Phases />
     </Theme>
   );
 }
