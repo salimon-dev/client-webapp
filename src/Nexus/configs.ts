@@ -98,6 +98,8 @@ export async function transformHttpResponse<T>(
         errors[key] = errors[key].replace("_", " ");
       });
       return { code: 400, errors };
+    } else if (err.status === 401) {
+      return { code: 401 };
     } else {
       return { code: 0 };
     }

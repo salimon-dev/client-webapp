@@ -42,7 +42,12 @@ export function userStatusToString(value: number) {
 }
 
 // http client
-export type HttpResponse<T> = HttpSuccess<T> | HttpValidationError | HttpUnknownError;
+export type HttpResponse<T> =
+  | HttpSuccess<T>
+  | HttpValidationError
+  | HttpUnauthorizedError
+  | HttpPermissionDeniedError
+  | HttpUnknownError;
 
 export type HttpSuccess<T> = {
   code: 200;
@@ -51,6 +56,12 @@ export type HttpSuccess<T> = {
 export type HttpValidationError = {
   code: 400;
   errors: { [key: string]: string };
+};
+export type HttpUnauthorizedError = {
+  code: 401;
+};
+export type HttpPermissionDeniedError = {
+  code: 403;
 };
 export type HttpUnknownError = {
   code: 0;

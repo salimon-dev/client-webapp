@@ -26,10 +26,11 @@ export default function Login() {
     onSubmit: async function (values) {
       setError(undefined);
       const response = await nexus.login(values);
-      if (!response) return;
-      if (response.status === 401) {
-        setError("username or password are incorrect");
-        return;
+      if (response.code === 200) return;
+      if (response.code === 400) {
+        formik.setErrors(response.errors);
+      } else if (response.code === 401) {
+        setError("username or password are incorred");
       }
     },
   });
