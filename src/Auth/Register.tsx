@@ -10,26 +10,27 @@ import { useAtomValue } from "jotai";
 import { nexusAtom } from "@providers/store";
 import Heading from "./Heading";
 
-export default function Login() {
+export default function Register() {
   const navigate = useNavigate();
   const nexus = useAtomValue(nexusAtom);
   const [error, setError] = useState<string>();
   const formik = useFormik({
     validationSchema: yup.object({
+      invitation_code: yup.string().required(),
       username: yup.string().required(),
       password: yup.string().required(),
     }),
     initialValues: {
+      invitation_code: "",
       username: "",
       password: "",
     },
     onSubmit: async function (values) {
       setError(undefined);
-      const response = await nexus.login(values);
-      if (!response) return;
-      if (response.status === 401) {
-        setError("username or password are incorrect");
-        return;
+      const response = await nexus.register(values);
+      if (response.code === 200) return;
+      if (response.code === 400) {
+        formik.setErrors(response.errors);
       }
     },
   });
@@ -40,6 +41,19 @@ export default function Login() {
         <Card style={{ padding: "24px 18px" }}>
           <form onSubmit={formik.handleSubmit}>
             <Grid columns="1" gap="4">
+              <TextInput
+                label="invitation code:"
+                name="invitation_code"
+                value={formik.values.invitation_code}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="john doe"
+                error={
+                  formik.touched.invitation_code && !!formik.errors.invitation_code
+                    ? formik.errors.invitation_code
+                    : ""
+                }
+              />
               <TextInput
                 label="username:"
                 name="username"
@@ -59,7 +73,7 @@ export default function Login() {
                 error={formik.touched.password && !!formik.errors.password ? formik.errors.password : ""}
               />
               <Button variant="outline" type="submit" loading={formik.isSubmitting}>
-                Login
+                Register
               </Button>
               {error && (
                 <Text size="1" color="red">
@@ -68,10 +82,10 @@ export default function Login() {
               )}
               <Link
                 onClick={() => {
-                  navigate("/register");
+                  navigate("/");
                 }}
               >
-                <Text size="2">need to register?</Text>
+                <Text size="2">already have an account?</Text>
               </Link>
               <Link
                 onClick={() => {

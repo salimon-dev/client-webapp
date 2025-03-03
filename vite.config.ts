@@ -28,7 +28,6 @@ export default defineConfig({
       "@providers": path.resolve(__dirname, "src/Providers"),
       "@icons": path.resolve(__dirname, "src/Icons"),
       "@components": path.resolve(__dirname, "src/Components"),
-      "@rest": path.resolve(__dirname, "src/Rest"),
       "@specs": path.resolve(__dirname, "src/Specs"),
       "@helpers": path.resolve(__dirname, "src/Helpers"),
       "@nexus": path.resolve(__dirname, "src/Nexus"),

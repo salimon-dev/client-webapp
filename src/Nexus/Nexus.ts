@@ -1,8 +1,8 @@
 import { BehaviorSubject } from "rxjs";
-import { loadConfigs, setupHttpClient, validateTokens } from "./configs";
+import { clearTokens, loadConfigs, setupHttpClient, validateTokens } from "./configs";
 import { IProfile } from "./specs";
 import axios from "axios";
-import { getProfile, ILoginParams, login } from "./auth";
+import { getProfile, ILoginParams, IRegisterParams, login, register } from "./auth";
 
 export default class Nexus {
   public baseUrl = "none";
@@ -26,7 +26,13 @@ export default class Nexus {
   login(param: ILoginParams) {
     return login(this, param);
   }
-  getProfile() {
-    return getProfile(this);
+  register(params: IRegisterParams) {
+    return register(this, params);
   }
+  public getProfile = () => {
+    return getProfile(this);
+  };
+  public logout = () => {
+    clearTokens(this);
+  };
 }

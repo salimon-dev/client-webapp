@@ -1,6 +1,6 @@
-import axios, { AxiosError, CreateAxiosDefaults } from "axios";
+import axios, { AxiosError, AxiosResponse, CreateAxiosDefaults } from "axios";
 import Nexus from "./Nexus";
-import { IAuthResponse } from "./specs";
+import { HttpResponse, IAuthResponse } from "./specs";
 import { IProfile } from "@specs/user";
 
 interface IConfigs {
@@ -12,7 +12,7 @@ export async function loadConfigs(nexus: Nexus) {
   nexus.baseUrl = response.data.nexus_base_url;
 }
 
-function clearTokens(nexus: Nexus) {
+export function clearTokens(nexus: Nexus) {
   localStorage.removeItem("access_token");
   localStorage.removeItem("refresh_token");
   nexus.accessToken.next(undefined);
@@ -76,9 +76,30 @@ export function setupHttpClient(nexus: Nexus) {
         // await rotateToken();
         return error.response;
       } else {
-        return error.response;
+        throw error;
       }
     }
   );
   nexus.httpClient = client;
+}
+
+export async function transformHttpResponse<T>(
+  call: () => Promise<AxiosResponse<T>>
+): Promise<HttpResponse<T>> {
+  try {
+    const response = await call();
+    return { code: 200, data: response.data };
+  } catch (e) {
+    const err = e as AxiosError;
+    if (err.status === 400 && err.response) {
+      const errors = err.response.data as { [key: string]: string };
+      Object.keys(errors).forEach((key) => {
+        if (!errors[key]) return;
+        errors[key] = errors[key].replace("_", " ");
+      });
+      return { code: 400, errors };
+    } else {
+      return { code: 0 };
+    }
+  }
 }

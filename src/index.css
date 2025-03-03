@@ -5,6 +5,9 @@ body {
   --default-font-family: "Vazirmatn";
   --cursor-button: pointer;
 }
+.rt-reset:where(a) {
+  cursor: pointer;
+}
 ::-webkit-scrollbar {
   width: 4px;
 }

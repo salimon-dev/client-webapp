@@ -34,9 +34,6 @@
       "@components/*": [
         "./Components/*"
       ],
-      "@rest/*": [
-        "./Rest/*"
-      ],
       "@specs/*": [
         "./Specs/*"
       ],

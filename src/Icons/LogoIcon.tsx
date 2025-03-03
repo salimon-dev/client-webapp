@@ -6,7 +6,13 @@ interface IProps {
 
 export default function LogoIcon({ style }: IProps) {
   return (
-    <svg style={{ stroke: "var(--accent-12)", ...style }} viewBox="0,0,600,600" xmlns="http://www.w3.org/2000/svg" strokeWidth="30" fill="none">
+    <svg
+      style={{ stroke: "var(--accent-12)", ...style }}
+      viewBox="0,0,600,600"
+      xmlns="http://www.w3.org/2000/svg"
+      strokeWidth="30"
+      fill="none"
+    >
       <g>
         <line y2="500" x2="300" y1="100" x1="300" />
         <line y2="100" x2="500" y1="100" x1="285" />

@@ -12,8 +12,10 @@ export default function Dialog({ title, description, trigger, children }: IProps
     <RDialog.Root>
       <RDialog.Trigger>{trigger}</RDialog.Trigger>
       <RDialog.Content maxWidth="450px">
-        <RDialog.Title>{title}</RDialog.Title>
-        <RDialog.Description>{description}</RDialog.Description>
+        <RDialog.Title style={{ marginBottom: 0 }}>{title}</RDialog.Title>
+        <RDialog.Description size="1" style={{ marginBottom: 8, color: "var(--gray-10)" }}>
+          {description}
+        </RDialog.Description>
         {children}
       </RDialog.Content>
     </RDialog.Root>
