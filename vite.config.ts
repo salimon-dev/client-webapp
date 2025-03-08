@@ -6,6 +6,7 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   build: {
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: function (id) {
@@ -30,7 +31,7 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "src/Components"),
       "@specs": path.resolve(__dirname, "src/Specs"),
       "@helpers": path.resolve(__dirname, "src/Helpers"),
-      "@nexus": path.resolve(__dirname, "src/Nexus"),
+      "@network": path.resolve(__dirname, "src/Network"),
     },
   },
 });

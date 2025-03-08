@@ -6,11 +6,9 @@ import { changeTheme } from "@providers/theme";
 import ProfileDialog from "@components/ProfileDialog/ProfileDialog";
 import UserIcon from "@icons/UserIcon";
 import LogoutIcon from "@icons/LogoutIcon";
-import { useAtomValue } from "jotai";
-import { nexusAtom } from "@providers/store";
+import { nexus } from "@providers/store";
 
 export default function Header() {
-  const nexus = useAtomValue(nexusAtom);
   return (
     <Flex direction="row" align="center" style={{ height: "100%" }}>
       <Box className={Styles.logo}>

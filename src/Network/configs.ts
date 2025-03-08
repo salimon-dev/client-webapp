@@ -8,6 +8,11 @@ interface IConfigs {
 }
 
 export async function loadConfigs(nexus: Nexus) {
+  const env_base_url = import.meta.env["VITE_NEXUS_BASE_URL"] as string | undefined;
+  if (env_base_url) {
+    nexus.baseUrl = env_base_url;
+    return;
+  }
   const response = await axios.get<IConfigs>("/configs.json");
   nexus.baseUrl = response.data.nexus_base_url;
 }

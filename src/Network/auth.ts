@@ -42,3 +42,13 @@ export async function getProfile(nexus: Nexus) {
   nexus.profile.next(response.data);
   return response;
 }
+
+interface IEntityTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+export async function getEntityTokens(nexus: Nexus, entity: string) {
+  return transformHttpResponse(() =>
+    nexus.httpClient.post<IEntityTokenResponse>("/auth/entity-token", { entity })
+  );
+}
