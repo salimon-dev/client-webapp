@@ -1,13 +1,13 @@
 import { Dialog as RDialog } from "@radix-ui/themes";
 import { JSX } from "react";
 
-interface IProps {
+interface Props {
   title: string;
   description: string;
   trigger: JSX.Element;
   children: JSX.Element;
 }
-export default function Dialog({ title, description, trigger, children }: IProps) {
+export default function Dialog({ title, description, trigger, children }: Props) {
   return (
     <RDialog.Root>
       <RDialog.Trigger>{trigger}</RDialog.Trigger>

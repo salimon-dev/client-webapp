@@ -1,9 +1,9 @@
 import Entity from "./Entity";
 import Nexus from "./Nexus";
-import { ICollection, IEntityProfile } from "./specs";
+import { Collection, EntityProfile } from "./specs";
 
 export async function fetchEntities(nexus: Nexus) {
-  const { status, data } = await nexus.httpClient.get<ICollection<IEntityProfile>>("/entities/search", {
+  const { status, data } = await nexus.httpClient.get<Collection<EntityProfile>>("/entities/search", {
     params: { page: 1, page_size: 128 },
   });
   if (status !== 200) {

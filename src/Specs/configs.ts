@@ -1,3 +1,3 @@
-export interface IConfigs {
+export interface Configs {
   base_url: string;
 }

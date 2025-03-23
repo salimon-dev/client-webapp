@@ -1,4 +1,4 @@
-export interface IProfile {
+export interface Profile {
   id: string;
   username: string;
   role: number;
@@ -9,15 +9,15 @@ export interface IProfile {
   updated_at: string;
 }
 
-export interface ICollection<T> {
+export interface Collection<T> {
   data: T[];
   page: number;
   page_size: number;
   total: number;
 }
 
-export interface IAuthResponse {
-  data: IProfile;
+export interface AuthResponse {
+  data: Profile;
   access_token: string;
   refresh_token: string;
 }
@@ -74,7 +74,7 @@ export type HttpUnknownError = {
   code: 0;
 };
 
-export interface IEntityProfile {
+export interface EntityProfile {
   name: string;
   description: string;
   base_url: string;

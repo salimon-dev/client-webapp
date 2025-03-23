@@ -1,6 +1,9 @@
 body {
   margin: 0px;
 }
+.rt-ContainerInner {
+  width: calc(100% - 12px);
+}
 .radix-themes {
   --default-font-family: "Vazirmatn";
   --cursor-button: pointer;

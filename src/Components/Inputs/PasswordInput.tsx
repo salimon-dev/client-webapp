@@ -1,9 +1,9 @@
 import { useState } from "react";
-import TextInput, { ITextInputProps } from "./TextInput";
+import TextInput, { TextInputProps } from "./TextInput";
 import Styles from "./styles.module.css";
 import DetailsIcon from "@icons/DetailsIcon";
 
-export default function PasswordInput(props: ITextInputProps) {
+export default function PasswordInput(props: TextInputProps) {
   const [show, setShow] = useState(false);
   return (
     <TextInput

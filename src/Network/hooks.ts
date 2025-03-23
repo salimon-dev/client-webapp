@@ -1,6 +1,6 @@
 import { nexus } from "@providers/store";
 import { useEffect, useState } from "react";
-import { IProfile } from "./specs";
+import { Profile } from "./specs";
 
 export function useAccessToken() {
   const [accessToken, setAccessToken] = useState<string>();
@@ -25,7 +25,7 @@ export function useRefreshToken() {
 }
 
 export function useProfile() {
-  const [profile, setProfile] = useState<IProfile>();
+  const [profile, setProfile] = useState<Profile>();
   useEffect(() => {
     const sub = nexus.profile.subscribe(setProfile);
     return () => {

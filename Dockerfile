@@ -9,4 +9,4 @@ RUN npm run build
 
 FROM httpd:alpine
 
-COPY --from=builder /app/dist /usr/local/apache2/htdocs/dev
+COPY --from=builder /app/dist /usr/local/apache2/htdocs

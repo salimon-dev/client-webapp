@@ -1,7 +1,7 @@
-interface IProps {
+interface Props {
   type: "success" | "error" | "info";
 }
-export default function CircleIcon({ type }: IProps) {
+export default function CircleIcon({ type }: Props) {
   function fill() {
     switch (type) {
       case "info":

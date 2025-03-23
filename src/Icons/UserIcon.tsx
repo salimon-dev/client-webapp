@@ -1,9 +1,9 @@
 import { CSSProperties } from "react";
 
-interface IProps {
+interface Props {
   style?: CSSProperties;
 }
-export default function UserIcon({ style }: IProps) {
+export default function UserIcon({ style }: Props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" style={style} xmlns="http://www.w3.org/2000/svg">
       <g>

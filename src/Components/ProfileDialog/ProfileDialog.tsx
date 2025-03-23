@@ -4,10 +4,10 @@ import { userRoleToString, userStatusToString } from "@network/specs";
 import { DataList } from "@radix-ui/themes";
 import { JSX } from "react";
 
-interface IProps {
+interface Props {
   children: JSX.Element;
 }
-export default function ProfileDialog({ children }: IProps) {
+export default function ProfileDialog({ children }: Props) {
   const profile = useProfile();
   if (!profile) return;
   return (

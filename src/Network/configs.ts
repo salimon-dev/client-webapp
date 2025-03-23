@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosResponse, CreateAxiosDefaults } from "axios";
 import Nexus from "./Nexus";
-import { HttpResponse, IAuthResponse } from "./specs";
-import { IProfile } from "@specs/user";
+import { HttpResponse, AuthResponse } from "./specs";
+import { Profile } from "@specs/user";
 
-interface IConfigs {
+interface Configs {
   nexus_base_url: string;
 }
 
@@ -13,7 +13,7 @@ export async function loadConfigs(nexus: Nexus) {
     nexus.baseUrl = env_base_url;
     return;
   }
-  const response = await axios.get<IConfigs>("/configs.json");
+  const response = await axios.get<Configs>("/configs.json");
   nexus.baseUrl = response.data.nexus_base_url;
 }
 
@@ -24,7 +24,7 @@ export function clearTokens(nexus: Nexus) {
   nexus.refreshToken.next(undefined);
   nexus.profile.next(undefined);
 }
-export function updateTokens(data: IAuthResponse, nexus: Nexus) {
+export function updateTokens(data: AuthResponse, nexus: Nexus) {
   localStorage.setItem("access_token", data.access_token);
   localStorage.setItem("refresh_token", data.refresh_token);
   nexus.accessToken.next(data.access_token);
@@ -40,7 +40,7 @@ export async function validateTokens(nexus: Nexus) {
     return;
   }
   try {
-    const response = await axios.get<IProfile>("/profile", {
+    const response = await axios.get<Profile>("/profile", {
       baseURL: nexus.baseUrl,
       headers: { Authorization: "Bearer " + accessToken },
     });
@@ -49,7 +49,7 @@ export async function validateTokens(nexus: Nexus) {
     nexus.profile.next(response.data);
   } catch {
     try {
-      const response = await axios.post<IAuthResponse>(
+      const response = await axios.post<AuthResponse>(
         "/auth/rotate",
         { token: refreshToken },
         { baseURL: nexus.baseUrl }

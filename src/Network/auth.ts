@@ -1,14 +1,14 @@
-import { IAuthResponse, IProfile } from "@specs/user";
+import { AuthResponse, Profile } from "@specs/user";
 import Nexus from "./Nexus";
 import { transformHttpResponse, updateTokens } from "./configs";
 
-export interface ILoginParams {
+export interface LoginParams {
   username: string;
   password: string;
 }
-export async function login(nexus: Nexus, params: ILoginParams) {
+export async function login(nexus: Nexus, params: LoginParams) {
   const response = await transformHttpResponse(() =>
-    nexus.httpClient.post<IAuthResponse>("/auth/login", params)
+    nexus.httpClient.post<AuthResponse>("/auth/login", params)
   );
   if (response.code !== 200) {
     return response;
@@ -17,15 +17,15 @@ export async function login(nexus: Nexus, params: ILoginParams) {
   return response;
 }
 
-export interface IRegisterParams {
+export interface RegisterParams {
   invitation_code: string;
   username: string;
   password: string;
 }
 
-export async function register(nexus: Nexus, params: IRegisterParams) {
+export async function register(nexus: Nexus, params: RegisterParams) {
   const response = await transformHttpResponse(() =>
-    nexus.httpClient.post<IAuthResponse>("/auth/register", params)
+    nexus.httpClient.post<AuthResponse>("/auth/register", params)
   );
   if (response.code !== 200) {
     return response;
@@ -35,7 +35,7 @@ export async function register(nexus: Nexus, params: IRegisterParams) {
 }
 
 export async function getProfile(nexus: Nexus) {
-  const response = await transformHttpResponse(() => nexus.httpClient.get<IProfile>("/auth/profile"));
+  const response = await transformHttpResponse(() => nexus.httpClient.get<Profile>("/auth/profile"));
   if (response.code !== 200) {
     return response;
   }
@@ -43,12 +43,12 @@ export async function getProfile(nexus: Nexus) {
   return response;
 }
 
-interface IEntityTokenResponse {
+interface EntityTokenResponse {
   access_token: string;
   refresh_token: string;
 }
 export async function getEntityTokens(nexus: Nexus, entity: string) {
   return transformHttpResponse(() =>
-    nexus.httpClient.post<IEntityTokenResponse>("/auth/entity-token", { entity })
+    nexus.httpClient.post<EntityTokenResponse>("/auth/entity-token", { entity })
   );
 }

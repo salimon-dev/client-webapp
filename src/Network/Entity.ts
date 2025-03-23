@@ -1,6 +1,8 @@
+import axios from "axios";
 import { getEntityTokens } from "./auth";
 import Nexus from "./Nexus";
-import { IEntityProfile } from "./specs";
+import { EntityProfile } from "./specs";
+import { InteractParams } from "./interact";
 
 export default class Entity {
   public name: string;
@@ -10,7 +12,8 @@ export default class Entity {
 
   public accessToken: string | undefined;
   public refresToken: string | undefined;
-  constructor(profile: IEntityProfile, private nexus: Nexus) {
+  public httpsClient = axios.create();
+  constructor(profile: EntityProfile, private nexus: Nexus) {
     this.name = profile.name;
     this.description = profile.description;
     this.tags = profile.tags;
@@ -27,5 +30,23 @@ export default class Entity {
     }
     this.accessToken = result.data.access_token;
     this.refresToken = result.data.refresh_token;
+    this.setupHttpClient();
   };
+
+  public setupHttpClient() {
+    this.httpsClient = axios.create({
+      baseURL: this.baseUrl,
+      headers: { Authorization: `Bearer ${this.accessToken}` },
+    });
+  }
+
+  public async interact(params: InteractParams) {
+    const data = { data: [{ from: "user", body: params.body }] };
+    try {
+      const result = await this.httpsClient.post("/interact", data).then((response) => response.data);
+      return result;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
