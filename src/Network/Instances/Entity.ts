@@ -1,8 +1,6 @@
-import axios from "axios";
-import { getEntityTokens } from "./auth";
-import Nexus from "./Nexus";
-import { EntityProfile } from "./specs";
-import { InteractParams } from "./interact";
+import axios, { Axios } from "axios";
+import { getEntityTokens } from "../auth";
+import { EntityProfile, InteractResponse, MessageRecord } from "../specs";
 
 export default class Entity {
   public name: string;
@@ -13,7 +11,7 @@ export default class Entity {
   public accessToken: string | undefined;
   public refresToken: string | undefined;
   public httpsClient = axios.create();
-  constructor(profile: EntityProfile, private nexus: Nexus) {
+  constructor(profile: EntityProfile, private nexusHttpClient: Axios) {
     this.name = profile.name;
     this.description = profile.description;
     this.tags = profile.tags;
@@ -22,7 +20,7 @@ export default class Entity {
   }
 
   public setup = async () => {
-    const result = await getEntityTokens(this.nexus, this.name);
+    const result = await getEntityTokens(this.nexusHttpClient, this.name);
     if (result.code !== 200) {
       // TODO: some issue is here
       console.error(result);
@@ -40,13 +38,16 @@ export default class Entity {
     });
   }
 
-  public async interact(params: InteractParams) {
-    const data = { data: [{ from: "user", body: params.body }] };
-    try {
-      const result = await this.httpsClient.post("/interact", data).then((response) => response.data);
-      return result;
-    } catch (err) {
-      console.error(err);
-    }
+  public async interact(messages: MessageRecord[]) {
+    const data = messages.map((message) => {
+      return {
+        body: message.body,
+        from: message.from,
+      };
+    });
+    const result = await this.httpsClient
+      .post("/interact", { data })
+      .then<InteractResponse>((response) => response.data);
+    return result;
   }
 }

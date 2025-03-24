@@ -1,6 +1,7 @@
 import { AuthResponse, Profile } from "@specs/user";
-import Nexus from "./Nexus";
+import Nexus from "./Instances/Nexus";
 import { transformHttpResponse, updateTokens } from "./configs";
+import { Axios } from "axios";
 
 export interface LoginParams {
   username: string;
@@ -47,8 +48,6 @@ interface EntityTokenResponse {
   access_token: string;
   refresh_token: string;
 }
-export async function getEntityTokens(nexus: Nexus, entity: string) {
-  return transformHttpResponse(() =>
-    nexus.httpClient.post<EntityTokenResponse>("/auth/entity-token", { entity })
-  );
+export async function getEntityTokens(httpClient: Axios, entity: string) {
+  return transformHttpResponse(() => httpClient.post<EntityTokenResponse>("/auth/entity-token", { entity }));
 }

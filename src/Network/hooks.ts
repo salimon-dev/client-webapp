@@ -1,6 +1,6 @@
 import { nexus } from "@providers/store";
 import { useEffect, useState } from "react";
-import { Profile } from "./specs";
+import { MessageRecord, Profile } from "./specs";
 
 export function useAccessToken() {
   const [accessToken, setAccessToken] = useState<string>();
@@ -49,4 +49,15 @@ export function useIsConnectedToNexus() {
     };
   }, []);
   return isReady;
+}
+
+export function useMessages() {
+  const [messages, setMessages] = useState<MessageRecord[]>([]);
+  useEffect(() => {
+    const sub = nexus.db.messages.subscribe(setMessages);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
+  return messages;
 }

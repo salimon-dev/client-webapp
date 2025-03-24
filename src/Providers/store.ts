@@ -1,4 +1,4 @@
-import Nexus from "@network/Nexus";
+import Nexus from "@network/Instances/Nexus";
 import { Theme } from "@specs/theme";
 import { atom, createStore } from "jotai";
 

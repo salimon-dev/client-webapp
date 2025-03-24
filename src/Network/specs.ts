@@ -80,3 +80,22 @@ export interface EntityProfile {
   base_url: string;
   tags: string[];
 }
+
+export type MessageType = "plain";
+
+export interface MessageRecord {
+  id: string;
+  from: string;
+  body: string;
+  type: MessageType;
+  sentAt: number;
+}
+export interface InteractParams {
+  body: string;
+}
+
+export interface InteractResponse {
+  from: string;
+  body: string;
+  type: MessageType;
+}

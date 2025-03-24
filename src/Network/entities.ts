@@ -1,5 +1,5 @@
-import Entity from "./Entity";
-import Nexus from "./Nexus";
+import Entity from "./Instances/Entity";
+import Nexus from "./Instances/Nexus";
 import { Collection, EntityProfile } from "./specs";
 
 export async function fetchEntities(nexus: Nexus) {
@@ -9,5 +9,5 @@ export async function fetchEntities(nexus: Nexus) {
   if (status !== 200) {
     return;
   }
-  nexus.entities = data.data.map((item) => new Entity(item, nexus));
+  nexus.entities = data.data.map((item) => new Entity(item, nexus.httpClient));
 }

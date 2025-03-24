@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse, CreateAxiosDefaults } from "axios";
-import Nexus from "./Nexus";
+import Nexus from "./Instances/Nexus";
 import { HttpResponse, AuthResponse } from "./specs";
 import { Profile } from "@specs/user";
 

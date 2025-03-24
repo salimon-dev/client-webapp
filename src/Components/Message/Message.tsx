@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
-import { MessageRecord } from "@network/message";
+import { MessageRecord } from "@network/specs";
 import { dateTimeToRelative } from "@helpers/time";
 import Avatar from "./Avatar";
 
