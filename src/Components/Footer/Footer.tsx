@@ -3,16 +3,18 @@ import Styles from "./styles.module.css";
 import { nexus } from "@providers/store";
 import { Button, Flex, TextField } from "@radix-ui/themes";
 import { useState } from "react";
+import { useInteractionState } from "@network/hooks";
 
 export default function Footer() {
+  const interactionState = useInteractionState();
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   async function send() {
     if (!body) return;
     try {
       setLoading(true);
-      await nexus.interact({ body });
       setBody("");
+      await nexus.interact({ body });
     } catch (err) {
       console.log(err);
     } finally {
@@ -22,7 +24,7 @@ export default function Footer() {
   return (
     <Flex direction="column">
       <Flex direction="row" className={Styles.interactionStatus}>
-        tina is typeing ...
+        {interactionState ? `${interactionState.name} is typing ...` : ""}
       </Flex>
       <Flex direction="row">
         <TextField.Root

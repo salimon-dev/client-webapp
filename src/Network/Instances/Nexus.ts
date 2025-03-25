@@ -71,7 +71,7 @@ export default class Nexus {
     if (!entity) throw new Error("no entity found");
     // step 3: send data to entity
     this.activeEntity.next(entity);
-    const result = await entity.interact(this.db.messages.value);
+    const result = await entity.interact(this.db.messages.value.sort((a, b) => a.sentAt - b.sentAt));
     await this.db.addMessage({
       from: result.from,
       body: result.body,

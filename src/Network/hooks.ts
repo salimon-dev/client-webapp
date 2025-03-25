@@ -1,6 +1,7 @@
 import { nexus } from "@providers/store";
 import { useEffect, useState } from "react";
 import { MessageRecord, Profile } from "./specs";
+import Entity from "./Instances/Entity";
 
 export function useAccessToken() {
   const [accessToken, setAccessToken] = useState<string>();
@@ -60,4 +61,15 @@ export function useMessages() {
     };
   }, []);
   return messages;
+}
+
+export function useInteractionState() {
+  const [entity, setEntity] = useState<Entity>();
+  useEffect(() => {
+    const sub = nexus.activeEntity.subscribe(setEntity);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
+  return entity;
 }
