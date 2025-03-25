@@ -26,7 +26,9 @@ export default function Register() {
     onSubmit: async function (values) {
       setError(undefined);
       const response = await nexus.register(values);
-      if (response.code === 200) return;
+      if (response.code === 200) {
+        navigate("/");
+      }
       if (response.code === 400) {
         formik.setErrors(response.errors);
       }

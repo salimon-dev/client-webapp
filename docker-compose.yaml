@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  nexus-admin-webapp:
+  client-webapp:
     build:
       context: .
       dockerfile: Dockerfile
