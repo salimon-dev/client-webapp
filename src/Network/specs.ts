@@ -90,6 +90,12 @@ export interface MessageRecord {
   type: MessageType;
   sentAt: number;
 }
+export interface MessageRecordParam {
+  from: string;
+  type: MessageType;
+  body: string;
+}
+
 export interface InteractParams {
   body: string;
 }

@@ -55,7 +55,7 @@ export function useIsConnectedToNexus() {
 export function useMessages() {
   const [messages, setMessages] = useState<MessageRecord[]>([]);
   useEffect(() => {
-    const sub = nexus.db.messages.subscribe(setMessages);
+    const sub = nexus.db.messages.subscribe((value) => setMessages([...value].reverse()));
     return () => {
       sub.unsubscribe();
     };

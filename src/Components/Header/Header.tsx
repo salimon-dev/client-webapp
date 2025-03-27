@@ -27,9 +27,6 @@ export default function Header() {
       <Button variant="soft" className={Styles.headerItem} onClick={nexus.logout}>
         <LogoutIcon />
       </Button>
-      {/* <Box className={Styles.headerItem}>history</Box>
-      <Box className={Styles.headerItem}>entity</Box>
-      <Box className={Styles.headerItem}>logout</Box> */}
     </Flex>
   );
 }

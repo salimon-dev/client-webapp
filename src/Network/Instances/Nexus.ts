@@ -1,13 +1,12 @@
 import { BehaviorSubject, map } from "rxjs";
 import { clearTokens, loadConfigs, setupHttpClient, validateTokens } from "../configs";
-import { Profile } from "../specs";
+import { MessageType, Profile } from "../specs";
 import axios from "axios";
 import { getProfile, LoginParams, RegisterParams, login, register } from "../auth";
 import { fetchEntities } from "../entities";
 import Entity from "./Entity";
 import { InteractParams } from "../specs";
 import DataBase from "./Database";
-import { v4 as uuidV4 } from "uuid";
 
 export default class Nexus {
   public db = new DataBase();
@@ -40,6 +39,8 @@ export default class Nexus {
       if (!result) return;
       await fetchEntities(this);
     });
+
+    this.db.interactionSignal.subscribe(this.handleInteractionSignal);
   };
 
   // auth methods
@@ -58,26 +59,30 @@ export default class Nexus {
 
   // interaction methods
   public interact = async (params: InteractParams) => {
-    // step 1: add user message to database
     await this.db.addMessage({
-      id: uuidV4(),
+      type: "plain",
       body: params.body,
       from: "user",
-      sentAt: Date.now(),
-      type: "plain",
     });
-    // step 2: find an entity for interaction
-    const entity = this.entities.find((item) => item.tags.includes("general"));
+  };
+
+  private handleInteractionSignal = async ({ type, from }: { type: MessageType; from: string }) => {
+    if (type === "plain" && from !== "user") {
+      // it means this is the last cycle of interaction
+      return;
+    }
+    // find the entity with compatible AC
+    const entity = this.entities.find((item) => item.tags.includes(type));
     if (!entity) throw new Error("no entity found");
-    // step 3: send data to entity
+
     this.activeEntity.next(entity);
-    const result = await entity.interact(this.db.messages.value.sort((a, b) => a.sentAt - b.sentAt));
+
+    // interact with entity
+    const result = await entity.interact(this.db.messages.value);
     await this.db.addMessage({
-      from: result.from,
-      body: result.body,
-      id: uuidV4(),
-      sentAt: Date.now(),
       type: result.type,
+      body: result.body,
+      from: result.from,
     });
     this.activeEntity.next(undefined);
   };
