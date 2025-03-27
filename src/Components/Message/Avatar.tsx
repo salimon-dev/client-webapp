@@ -2,10 +2,10 @@ import LogoIcon from "@icons/LogoIcon";
 import UserIcon from "@icons/UserIcon";
 import { Flex, Text } from "@radix-ui/themes";
 
-interface IProps {
+interface Props {
   from: string;
 }
-export default function Avatar({ from }: IProps) {
+export default function Avatar({ from }: Props) {
   if (from === "user") {
     return (
       <Flex direction="row" style={{ alignItems: "center", height: 38 }}>

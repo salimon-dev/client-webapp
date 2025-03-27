@@ -1,6 +1,11 @@
-export default function ThemeIcon() {
+import { CSSProperties } from "react";
+
+interface Props {
+  style?: CSSProperties;
+}
+export default function ThemeIcon({ style }: Props) {
   return (
-    <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none">
+    <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none" style={style}>
       <g>
         <path
           style={{ stroke: "var(--accent-12)" }}

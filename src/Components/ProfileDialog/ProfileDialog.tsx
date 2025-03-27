@@ -1,13 +1,13 @@
 import Dialog from "@components/Dialog/Dialog";
-import { useProfile } from "@nexus/hooks";
-import { userRoleToString, userStatusToString } from "@nexus/specs";
+import { useProfile } from "@network/hooks";
+import { userRoleToString, userStatusToString } from "@network/specs";
 import { DataList } from "@radix-ui/themes";
 import { JSX } from "react";
 
-interface IProps {
+interface Props {
   children: JSX.Element;
 }
-export default function ProfileDialog({ children }: IProps) {
+export default function ProfileDialog({ children }: Props) {
   const profile = useProfile();
   if (!profile) return;
   return (
@@ -28,10 +28,6 @@ export default function ProfileDialog({ children }: IProps) {
         <DataList.Item align="center">
           <DataList.Label>credit</DataList.Label>
           <DataList.Value>{profile.credit}</DataList.Value>
-        </DataList.Item>
-        <DataList.Item align="center">
-          <DataList.Label>balance</DataList.Label>
-          <DataList.Value>{profile.balance}</DataList.Value>
         </DataList.Item>
       </DataList.Root>
     </Dialog>

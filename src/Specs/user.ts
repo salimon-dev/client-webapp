@@ -1,4 +1,4 @@
-export interface IProfile {
+export interface Profile {
   id: string;
   username: string;
   role: number;
@@ -9,8 +9,8 @@ export interface IProfile {
   updated_at: string;
 }
 
-export interface IAuthResponse {
-  data: IProfile;
+export interface AuthResponse {
+  data: Profile;
   access_token: string;
   refresh_token: string;
 }

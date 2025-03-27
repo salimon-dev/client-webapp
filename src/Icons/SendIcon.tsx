@@ -1,9 +1,9 @@
 import { CSSProperties } from "react";
 
-interface IProps {
+interface Props {
   style?: CSSProperties;
 }
-export default function SendIcon({ style }: IProps) {
+export default function SendIcon({ style }: Props) {
   return (
     <svg
       style={{ fill: "var(--accent-12)", ...style }}

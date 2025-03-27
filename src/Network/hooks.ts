@@ -1,41 +1,38 @@
-import { nexusAtom } from "@providers/store";
-import { useAtomValue } from "jotai";
+import { nexus } from "@providers/store";
 import { useEffect, useState } from "react";
-import { IProfile } from "./specs";
+import { MessageRecord, Profile } from "./specs";
+import Entity from "./Instances/Entity";
 
 export function useAccessToken() {
   const [accessToken, setAccessToken] = useState<string>();
-  const nexus = useAtomValue(nexusAtom);
   useEffect(() => {
     const sub = nexus.accessToken.subscribe(setAccessToken);
     return () => {
       sub.unsubscribe();
     };
-  }, [nexus]);
+  }, []);
   return accessToken;
 }
 
 export function useRefreshToken() {
   const [refreshToken, setRefreshToken] = useState<string>();
-  const nexus = useAtomValue(nexusAtom);
   useEffect(() => {
     const sub = nexus.refreshToken.subscribe(setRefreshToken);
     return () => {
       sub.unsubscribe();
     };
-  }, [nexus]);
+  }, []);
   return refreshToken;
 }
 
 export function useProfile() {
-  const [profile, setProfile] = useState<IProfile>();
-  const nexus = useAtomValue(nexusAtom);
+  const [profile, setProfile] = useState<Profile>();
   useEffect(() => {
     const sub = nexus.profile.subscribe(setProfile);
     return () => {
       sub.unsubscribe();
     };
-  }, [nexus]);
+  }, []);
   return profile;
 }
 
@@ -46,12 +43,33 @@ export function useIsLoggedInToNexus() {
 
 export function useIsConnectedToNexus() {
   const [isReady, setIsReady] = useState<boolean>(false);
-  const nexus = useAtomValue(nexusAtom);
   useEffect(() => {
     const sub = nexus.isReady.subscribe(setIsReady);
     return () => {
       sub.unsubscribe();
     };
-  }, [nexus]);
+  }, []);
   return isReady;
+}
+
+export function useMessages() {
+  const [messages, setMessages] = useState<MessageRecord[]>([]);
+  useEffect(() => {
+    const sub = nexus.db.messages.subscribe((value) => setMessages([...value].reverse()));
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
+  return messages;
+}
+
+export function useInteractionState() {
+  const [entity, setEntity] = useState<Entity>();
+  useEffect(() => {
+    const sub = nexus.activeEntity.subscribe(setEntity);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
+  return entity;
 }

@@ -40,8 +40,8 @@
       "@helpers/*": [
         "./Helpers/*"
       ],
-      "@nexus/*": [
-        "./Nexus/*"
+      "@network/*": [
+        "./Network/*"
       ],
     }
   },

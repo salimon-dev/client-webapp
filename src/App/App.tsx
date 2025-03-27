@@ -4,7 +4,7 @@ import { themeModeAtom } from "@providers/store";
 import Splash from "@components/Splash/Splash";
 import AuthRoutes from "./AuthRoutes";
 import GuestRoutes from "./GuestRoutes";
-import { useIsConnectedToNexus, useIsLoggedInToNexus } from "@nexus/hooks";
+import { useIsConnectedToNexus, useIsLoggedInToNexus } from "@network/hooks";
 
 export function Phases() {
   const isConnectedToNexus = useIsConnectedToNexus();

@@ -1,14 +1,14 @@
 import { Box, Flex, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
-import { IMessage } from "@specs/image";
+import { MessageRecord } from "@network/specs";
 import { dateTimeToRelative } from "@helpers/time";
 import Avatar from "./Avatar";
 
-interface IProps {
-  message: IMessage;
+interface Props {
+  message: MessageRecord;
 }
 
-export default function Message({ message }: IProps) {
+export default function Message({ message }: Props) {
   return (
     <Box className={Styles.messageBox}>
       <Flex direction="column" gap="2">

@@ -8,12 +8,13 @@
 }
 .content {
   flex: 1;
+  max-height: calc(100vh - 158px);
 }
 .footer {
   box-shadow: 0px -10px 8px 8px var(--color-background);
   background: var(--color-background);
   flex: 1;
-  max-height: 64px;
+  max-height: 94px;
   padding: 10px 0px;
   box-sizing: border-box;
 }

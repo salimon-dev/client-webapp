@@ -1,10 +1,10 @@
 import { CSSProperties } from "react";
 
-interface IProps {
+interface Props {
   style?: CSSProperties;
 }
 
-export default function LogoIcon({ style }: IProps) {
+export default function LogoIcon({ style }: Props) {
   return (
     <svg
       style={{ stroke: "var(--accent-12)", ...style }}

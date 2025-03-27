@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export function dateTimeToRelative(value: Date) {
+export function dateTimeToRelative(value: number) {
   const m = moment(value);
   const now = moment();
   const diff = Math.abs(m.diff(now, "seconds"));

@@ -1,6 +1,6 @@
 import { Flex, Text, TextField } from "@radix-ui/themes";
 import { ChangeEventHandler, FocusEventHandler, JSX } from "react";
-export interface ITextInputProps {
+export interface TextInputProps {
   label?: string;
   value?: string;
   name?: string;
@@ -23,7 +23,7 @@ export default function TextInput({
   error,
   leftSlot,
   rightSlot,
-}: ITextInputProps) {
+}: TextInputProps) {
   return (
     <Flex direction="column" gap="2">
       <Text size="2">{label}</Text>

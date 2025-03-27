@@ -1,4 +1,4 @@
-export interface IProfile {
+export interface Profile {
   id: string;
   username: string;
   role: number;
@@ -9,8 +9,15 @@ export interface IProfile {
   updated_at: string;
 }
 
-export interface IAuthResponse {
-  data: IProfile;
+export interface Collection<T> {
+  data: T[];
+  page: number;
+  page_size: number;
+  total: number;
+}
+
+export interface AuthResponse {
+  data: Profile;
   access_token: string;
   refresh_token: string;
 }
@@ -66,3 +73,35 @@ export type HttpPermissionDeniedError = {
 export type HttpUnknownError = {
   code: 0;
 };
+
+export interface EntityProfile {
+  name: string;
+  description: string;
+  base_url: string;
+  tags: string[];
+}
+
+export type MessageType = "plain";
+
+export interface MessageRecord {
+  id: string;
+  from: string;
+  body: string;
+  type: MessageType;
+  sentAt: number;
+}
+export interface MessageRecordParam {
+  from: string;
+  type: MessageType;
+  body: string;
+}
+
+export interface InteractParams {
+  body: string;
+}
+
+export interface InteractResponse {
+  from: string;
+  body: string;
+  type: MessageType;
+}

@@ -1,10 +1,10 @@
 import { CSSProperties } from "react";
 
-interface IProps {
+interface Props {
   style?: CSSProperties;
 }
 
-export default function LogoutIcon({ style }: IProps) {
+export default function LogoutIcon({ style }: Props) {
   return (
     <svg
       style={{ fill: "var(--accent-12)", ...style }}

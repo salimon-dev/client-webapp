@@ -6,13 +6,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
-import { useAtomValue } from "jotai";
-import { nexusAtom } from "@providers/store";
 import Heading from "./Heading";
+import { nexus } from "@providers/store";
 
 export default function Register() {
   const navigate = useNavigate();
-  const nexus = useAtomValue(nexusAtom);
   const [error, setError] = useState<string>();
   const formik = useFormik({
     validationSchema: yup.object({
@@ -28,7 +26,9 @@ export default function Register() {
     onSubmit: async function (values) {
       setError(undefined);
       const response = await nexus.register(values);
-      if (response.code === 200) return;
+      if (response.code === 200) {
+        navigate("/");
+      }
       if (response.code === 400) {
         formik.setErrors(response.errors);
       }
