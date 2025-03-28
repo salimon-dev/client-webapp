@@ -23,9 +23,9 @@ jobs:
       - name: Create .env File
         run: |
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "{\"nexus_base_url\": \"https://salimon.net/nexus\"}" > .env
+            echo "{\"nexus_base_url\": \"https://salimon.net/nexus\"}" > ./public/configs.json
           else
-            echo "{\"nexus_base_url\": \"https://dev.salimon.net/nexus\"}" > .env
+            echo "{\"nexus_base_url\": \"https://dev.salimon.net/nexus\"}" > ./public/configs.json
           fi
 
       - name: Set up Docker Buildx
