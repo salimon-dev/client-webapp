@@ -81,7 +81,8 @@ export interface EntityProfile {
   tags: string[];
 }
 
-export type MessageType = "plain";
+type StorageMessageType = "setStringValue";
+export type MessageType = "plain" | "actionResult" | StorageMessageType;
 
 export interface MessageRecord {
   id: string;
@@ -89,6 +90,11 @@ export interface MessageRecord {
   body: string;
   type: MessageType;
   sentAt: number;
+}
+
+export interface MessageBody {
+  meta: unknown;
+  body: unknown;
 }
 export interface MessageRecordParam {
   from: string;

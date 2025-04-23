@@ -41,6 +41,7 @@ export default class Entity {
   public async interact(messages: MessageRecord[]) {
     const data = messages.map((message) => {
       return {
+        type: message.type,
         body: message.body,
         from: message.from,
       };
