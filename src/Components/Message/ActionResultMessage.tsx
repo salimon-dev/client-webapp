@@ -11,9 +11,8 @@ function actionResultStatus(message: MessageRecord): "success" | "error" | "warn
   // unknown state
   if (message.type !== "actionResult") return "warning";
   // parse the state out of body
-  const body = JSON.parse(message.body) as { arguments: { result: "failed" | "success" } };
-  switch (body.arguments.result) {
-    case "failed":
+  switch (message.result.status) {
+    case "failure":
       return "error";
     case "success":
       return "success";

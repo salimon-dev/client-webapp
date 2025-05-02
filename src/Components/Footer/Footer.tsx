@@ -14,7 +14,7 @@ export default function Footer() {
     try {
       setLoading(true);
       setBody("");
-      await nexus.interact({ body });
+      await nexus.interact({ body, from: "user", type: "plain" });
     } catch (err) {
       console.log(err);
     } finally {

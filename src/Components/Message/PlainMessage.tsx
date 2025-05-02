@@ -9,6 +9,7 @@ interface Props {
 }
 
 export default function PlainMessage({ message }: Props) {
+  if (message.type !== "plain") return;
   return (
     <Box className={Styles.messageBox}>
       <Flex direction="column" gap="2">

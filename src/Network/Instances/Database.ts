@@ -1,4 +1,4 @@
-import { MessageRecord, MessageRecordParam } from "@network/specs";
+import { MessageRecord } from "@network/specs";
 import { IDBPDatabase, openDB } from "idb";
 import { BehaviorSubject, Subject } from "rxjs";
 
@@ -64,10 +64,9 @@ export default class DataBase {
     this.messages.next(data);
   }
 
-  public async addMessage(message: MessageRecordParam) {
-    const record: MessageRecord = { ...message, id: Date.now().toString(), sentAt: Date.now() };
-    await this.db.add("messages", record);
+  public async addMessage(message: MessageRecord) {
+    await this.db.add("messages", message);
     await this.updateMessageList();
-    this.interactionSignal.next(record);
+    this.interactionSignal.next(message);
   }
 }
