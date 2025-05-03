@@ -1,0 +1,65 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  background: var(--accent-a4);
+  border-radius: 16px;
+  padding: 12px;
+  padding-top: 16px;
+  box-sizing: border-box;
+}
+
+.input {
+  width: 100%;
+  margin: 0px;
+  max-height: 60px;
+  height: 32px;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  overflow: auto;
+  border: none;
+  background: none;
+  resize: none;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  gap: 4px;
+}
+
+.actionButton {
+  border: 1px solid var(--accent-a3);
+  font-size: var(--font-size-2);
+  border-radius: 8px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 12px;
+  cursor: pointer;
+  transition: all ease-in-out 250ms;
+}
+.actionButton:hover {
+  background: var(--accent-a4);
+}
+.interactionStatus {
+  color: var(--gray-11);
+  font-size: var(--font-size-2);
+  margin-right: auto;
+}

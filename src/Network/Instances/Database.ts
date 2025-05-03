@@ -69,4 +69,9 @@ export default class DataBase {
     await this.updateMessageList();
     this.interactionSignal.next(message);
   }
+
+  public async clearMessages() {
+    await this.db.clear("messages");
+    await this.updateMessageList();
+  }
 }
