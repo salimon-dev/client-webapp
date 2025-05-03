@@ -1,6 +1,7 @@
 import axios, { Axios } from "axios";
 import { getEntityTokens } from "../auth";
-import { EntityProfile, InteractResponse, MessageRecord } from "../specs";
+import { EntityProfile, MessageRecord } from "../specs";
+import { InteractionSchema } from "../interactions.specs";
 
 export default class Entity {
   public name: string;
@@ -39,15 +40,9 @@ export default class Entity {
   }
 
   public async interact(messages: MessageRecord[]) {
-    const data = messages.map((message) => {
-      return {
-        body: message.body,
-        from: message.from,
-      };
-    });
     const result = await this.httpsClient
-      .post("/interact", { data })
-      .then<InteractResponse>((response) => response.data);
+      .post("/interact", { data: messages })
+      .then<InteractionSchema>((response) => response.data);
     return result;
   }
 }

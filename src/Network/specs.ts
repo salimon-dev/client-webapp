@@ -1,3 +1,5 @@
+import { Message } from "./interactions.specs";
+
 export interface Profile {
   id: string;
   username: string;
@@ -80,28 +82,7 @@ export interface EntityProfile {
   base_url: string;
   tags: string[];
 }
-
-export type MessageType = "plain";
-
-export interface MessageRecord {
+export type MessageRecord = Message & {
   id: string;
-  from: string;
-  body: string;
-  type: MessageType;
   sentAt: number;
-}
-export interface MessageRecordParam {
-  from: string;
-  type: MessageType;
-  body: string;
-}
-
-export interface InteractParams {
-  body: string;
-}
-
-export interface InteractResponse {
-  from: string;
-  body: string;
-  type: MessageType;
-}
+};

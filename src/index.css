@@ -24,3 +24,9 @@ body {
   border-radius: 4px;
   /* border-radius: var(--border-radius-md); */
 }
+
+:root {
+  --color-danger: #df2935;
+  --color-success: #2f7560;
+  --color-warning: #ffdb3d;
+}

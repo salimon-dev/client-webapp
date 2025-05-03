@@ -1,4 +1,4 @@
-import { MessageRecord, MessageRecordParam, MessageType } from "@network/specs";
+import { MessageRecord } from "@network/specs";
 import { IDBPDatabase, openDB } from "idb";
 import { BehaviorSubject, Subject } from "rxjs";
 
@@ -13,13 +13,12 @@ export default class DataBase {
 
   public messages = new BehaviorSubject<MessageRecord[]>([]);
   // this signal activates when new data added to the list of messages
-  public interactionSignal = new Subject<{ type: MessageType; from: string }>();
+  public interactionSignal = new Subject<MessageRecord>();
 
   public async setup(name: string) {
     this.name = name;
     this.db = await openDB(name, 1, {
       upgrade: (db, oldVersion, newVersion) => {
-        console.log("here");
         if (!db.objectStoreNames.contains("messages")) {
           db.createObjectStore("messages", { keyPath: "id" });
         } else {
@@ -27,7 +26,7 @@ export default class DataBase {
           db.deleteObjectStore("messages");
           db.createObjectStore("messages", { keyPath: "id" });
         }
-        console.log(`upgrade needed from ${oldVersion} to ${newVersion}`);
+        console.debug(`upgrade needed from ${oldVersion} to ${newVersion}`);
       },
       blocked: (currentVersion, blockedVersion) => {
         console.log(`blocked from ${currentVersion} to ${blockedVersion}`);
@@ -65,9 +64,14 @@ export default class DataBase {
     this.messages.next(data);
   }
 
-  public async addMessage(message: MessageRecordParam) {
-    await this.db.add("messages", { ...message, id: Date.now(), sentAt: Date.now() });
+  public async addMessage(message: MessageRecord) {
+    await this.db.add("messages", message);
     await this.updateMessageList();
-    this.interactionSignal.next({ type: message.type, from: message.from });
+    this.interactionSignal.next(message);
+  }
+
+  public async clearMessages() {
+    await this.db.clear("messages");
+    await this.updateMessageList();
   }
 }

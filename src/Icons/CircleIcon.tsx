@@ -1,11 +1,11 @@
 interface Props {
-  type: "success" | "error" | "info";
+  type: "success" | "error" | "warning";
 }
 export default function CircleIcon({ type }: Props) {
   function fill() {
     switch (type) {
-      case "info":
-        return "var(--color-info)";
+      case "warning":
+        return "var(--color-warning)";
       case "error":
         return "var(--color-danger)";
       case "success":
@@ -13,7 +13,7 @@ export default function CircleIcon({ type }: Props) {
     }
   }
   return (
-    <svg viewBox="0 0 24 24" width={12} height={12} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 24 24" width="12px" height="12px" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="24" height="24" />
       <path
         style={{ fill: fill() }}

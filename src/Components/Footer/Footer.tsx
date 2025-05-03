@@ -11,10 +11,15 @@ export default function Footer() {
   const [loading, setLoading] = useState(false);
   async function send() {
     if (!body) return;
+    if (body === "clear") {
+      await nexus.db.clearMessages();
+      setBody("");
+      return;
+    }
     try {
       setLoading(true);
       setBody("");
-      await nexus.interact({ body });
+      await nexus.interact({ body, from: "user", type: "plain" });
     } catch (err) {
       console.log(err);
     } finally {

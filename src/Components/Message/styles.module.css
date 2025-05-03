@@ -5,6 +5,24 @@
   box-sizing: border-box;
 }
 
+.actionBox {
+  box-sizing: border-box;
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.actionBox > span {
+  color: var(--gray-10);
+}
+
+.actionBox > svg {
+  margin-right: 4px;
+  width: 10px;
+  height: 10px;
+}
+
 .messageDate {
   color: var(--gray-10);
   font-size: var(--font-size-1);

@@ -1,12 +1,12 @@
 import { BehaviorSubject, map } from "rxjs";
 import { clearTokens, loadConfigs, setupHttpClient, validateTokens } from "../configs";
-import { MessageType, Profile } from "../specs";
+import { MessageRecord, Profile } from "../specs";
 import axios from "axios";
 import { getProfile, LoginParams, RegisterParams, login, register } from "../auth";
-import { fetchEntities } from "../entities";
+import { fetchEntities, generateNoEntityFoundMessage } from "../entities";
 import Entity from "./Entity";
-import { InteractParams } from "../specs";
 import DataBase from "./Database";
+import { Message } from "../interactions.specs";
 
 export default class Nexus {
   public db = new DataBase();
@@ -58,32 +58,40 @@ export default class Nexus {
   };
 
   // interaction methods
-  public interact = async (params: InteractParams) => {
-    await this.db.addMessage({
-      type: "plain",
-      body: params.body,
-      from: "user",
-    });
+  public interact = async (message: Message) => {
+    const record: MessageRecord = {
+      ...message,
+      id: Date.now().toString(),
+      sentAt: Date.now(),
+    };
+    await this.db.addMessage(record);
   };
 
-  private handleInteractionSignal = async ({ type, from }: { type: MessageType; from: string }) => {
+  private handleInteractionSignal = async (message: MessageRecord) => {
+    const { type, from } = message;
     if (type === "plain" && from !== "user") {
       // it means this is the last cycle of interaction
       return;
     }
-    // find the entity with compatible AC
+
+    // find the entity with compatible AK
     const entity = this.entities.find((item) => item.tags.includes(type));
-    if (!entity) throw new Error("no entity found");
+    if (!entity) {
+      return await this.db.addMessage(generateNoEntityFoundMessage(message));
+    }
 
     this.activeEntity.next(entity);
-
-    // interact with entity
-    const result = await entity.interact(this.db.messages.value);
-    await this.db.addMessage({
-      type: result.type,
-      body: result.body,
-      from: result.from,
-    });
-    this.activeEntity.next(undefined);
+    try {
+      // interact with entity
+      const result = await entity.interact(this.db.messages.value);
+      for (const message of result.data) {
+        await this.db.addMessage({ ...message, id: Date.now().toString(), sentAt: Date.now() });
+      }
+    } catch (e) {
+      // TODO: we have to do something here (rollback messages?)
+      console.log(e);
+    } finally {
+      this.activeEntity.next(undefined);
+    }
   };
 }
