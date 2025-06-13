@@ -48,6 +48,8 @@ export default function SendBox() {
           onPaste={(event) => {
             console.log(event);
           }}
+          name="body"
+          placeholder="Type here ..."
         />
         <div className={Styles.actions}>
           <div className={Styles.interactionStatus}>

@@ -7,17 +7,20 @@
   align-items: center;
   cursor: pointer;
   border-radius: 12px;
+  margin: 0px 5px;
 }
 .headerItem svg {
   width: 18px;
   height: 18px;
 }
-.headerItem:not(:last-child) {
-  margin-right: 4px;
+.headerItem:last-child {
+  margin-right: 0px;
+}
+.headerItem:first-child {
+  margin-left: 0px;
 }
 
 .logo {
-  flex: 1;
   display: flex;
   justify-content: start;
   align-items: center;

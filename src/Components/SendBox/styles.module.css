@@ -35,6 +35,10 @@
   outline: none;
 }
 
+.input::placeholder {
+  color: var(--gray-11);
+}
+
 .actions {
   display: flex;
   flex-direction: row;

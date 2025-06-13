@@ -10,23 +10,31 @@ import { nexus } from "@providers/store";
 
 export default function Header() {
   return (
-    <Flex direction="row" align="center" style={{ height: "100%" }}>
+    <Flex direction="row" align="center" style={{ height: "100%", justifyContent: "space-between" }}>
+      <Flex direction="row">
+        <Button variant="soft" className={Styles.headerItem}>
+          +
+        </Button>
+        <Button variant="soft" className={Styles.headerItem}>
+          +
+        </Button>
+      </Flex>
       <Box className={Styles.logo}>
         <LogoIcon style={{ height: 32, width: 32 }} />
       </Box>
-      {/* <Box className={Styles.headerItem}>new</Box> */}
-
-      <ProfileDialog>
-        <Button variant="soft" className={Styles.headerItem}>
-          <UserIcon />
+      <Flex direction="row">
+        <ProfileDialog>
+          <Button variant="soft" className={Styles.headerItem}>
+            <UserIcon />
+          </Button>
+        </ProfileDialog>
+        <Button variant="soft" className={Styles.headerItem} onClick={changeTheme}>
+          <ThemeIcon />
         </Button>
-      </ProfileDialog>
-      <Button variant="soft" className={Styles.headerItem} onClick={changeTheme}>
-        <ThemeIcon />
-      </Button>
-      <Button variant="soft" className={Styles.headerItem} onClick={nexus.logout}>
-        <LogoutIcon />
-      </Button>
+        <Button variant="soft" className={Styles.headerItem} onClick={nexus.logout}>
+          <LogoutIcon />
+        </Button>
+      </Flex>
     </Flex>
   );
 }
