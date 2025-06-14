@@ -24,7 +24,7 @@ export function Phases() {
 export default function App() {
   const theme = useAtomValue(themeModeAtom);
   return (
-    <Theme appearance={theme} accentColor="blue">
+    <Theme appearance={theme} accentColor="indigo">
       <Phases />
     </Theme>
   );

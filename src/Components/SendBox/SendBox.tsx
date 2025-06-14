@@ -1,11 +1,15 @@
 import SendIcon from "@icons/SendIcon";
 import { useInteractionState } from "@network/hooks";
 import { nexus } from "@providers/store";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ActionButton from "./ActionButton";
 import Styles from "./styles.module.css";
 export default function SendBox() {
   const ref = useRef<HTMLTextAreaElement>(null);
+
+  const suggestionRef = useRef<HTMLDivElement>(null);
+  const inputBoxRef = useRef<HTMLDivElement>(null);
+  const [showSuggestion, setShowSuggestion] = useState(false);
 
   const interactionState = useInteractionState();
   const [body, setBody] = useState("");
@@ -28,9 +32,21 @@ export default function SendBox() {
     }
   }
 
+  useEffect(() => {
+    if (!inputBoxRef.current || !suggestionRef.current) return;
+    if (showSuggestion) {
+      console.log("show");
+    } else {
+      console.log("hide");
+    }
+  }, [showSuggestion]);
+
   return (
     <div className={Styles.container}>
-      <div className={Styles.inputBox}>
+      <div className={Styles.inputBox} ref={inputBoxRef}>
+        <div className={Styles.suggestion} ref={suggestionRef}>
+          some
+        </div>
         <textarea
           ref={ref}
           autoFocus
@@ -44,6 +60,12 @@ export default function SendBox() {
           }}
           onKeyDown={(event) => {
             if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) send();
+            if (event.key === "@") {
+              setShowSuggestion(true);
+            }
+            if (event.key === "/") {
+              setShowSuggestion(true);
+            }
           }}
           onPaste={(event) => {
             console.log(event);

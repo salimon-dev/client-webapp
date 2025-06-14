@@ -1,0 +1,39 @@
+.mainHeader {
+  background: var(--color-background);
+  flex: 1;
+  max-height: 64px;
+  z-index: 1;
+  box-sizing: border-box;
+  padding: 0px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.headerItem {
+  width: 32px;
+  height: 32px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 12px;
+  margin: 0px 5px;
+}
+.headerItem svg {
+  width: 18px;
+  height: 18px;
+}
+.headerItem:last-child {
+  margin-right: 0px;
+}
+.headerItem:first-child {
+  margin-left: 0px;
+}
+
+.logo {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 10px;
+}

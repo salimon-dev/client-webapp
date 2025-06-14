@@ -1,0 +1,11 @@
+.mainHeader {
+  background: var(--color-background);
+  flex: 1;
+  max-height: 64px;
+  z-index: 1;
+  box-sizing: border-box;
+  padding: 0px 12px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--gray-3);
+}

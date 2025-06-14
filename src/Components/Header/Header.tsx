@@ -7,16 +7,18 @@ import ProfileDialog from "@components/ProfileDialog/ProfileDialog";
 import UserIcon from "@icons/UserIcon";
 import LogoutIcon from "@icons/LogoutIcon";
 import { nexus } from "@providers/store";
+import MenuIcon from "@icons/MenuIcon";
+import AddIcon from "@icons/AddIcon";
 
 export default function Header() {
   return (
     <Flex direction="row" align="center" style={{ height: "100%", justifyContent: "space-between" }}>
       <Flex direction="row">
         <Button variant="soft" className={Styles.headerItem}>
-          +
+          <MenuIcon />
         </Button>
         <Button variant="soft" className={Styles.headerItem}>
-          +
+          <AddIcon />
         </Button>
       </Flex>
       <Box className={Styles.logo}>
