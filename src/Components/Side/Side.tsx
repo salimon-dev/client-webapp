@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useAtomValue } from "jotai";
 import { sideOpenAtom } from "@providers/layout";
 import Styles from "./styles.module.css";
-import ThreadItem from "@components/ThreadItem/ThreadItem";
+import NoThreadScreen from "@components/NoThreadScreen/NoThreadScreen";
 
 export default function Side() {
   const sideRef = useRef<HTMLDivElement>(null);
@@ -23,10 +23,7 @@ export default function Side() {
         <>
           <SideHeader />
           <Flex direction="column" style={{ flex: 1, overflow: "auto" }}>
-            <ThreadItem />
-            <ThreadItem />
-            <ThreadItem />
-            <ThreadItem />
+            <NoThreadScreen />
           </Flex>
         </>
       )}

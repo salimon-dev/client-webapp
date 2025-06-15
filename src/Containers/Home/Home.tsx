@@ -1,6 +1,8 @@
 import { Flex } from "@radix-ui/themes";
 import MainHeader from "../../Components/MainHeader/MainHeader";
 import Side from "../../Components/Side/Side";
+import SendBox from "@components/SendBox/SendBox";
+import Content from "@components/Content/Content";
 
 export default function Home() {
   return (
@@ -8,12 +10,8 @@ export default function Home() {
       <Side />
       <Flex direction="column" style={{ flex: 1 }}>
         <MainHeader />
-        <Flex style={{ flex: 1 }} direction="column">
-          content
-        </Flex>
-        <Flex style={{ flex: 1, maxHeight: 120 }} direction="row">
-          send box
-        </Flex>
+        <Content />
+        <SendBox />
       </Flex>
     </Flex>
   );

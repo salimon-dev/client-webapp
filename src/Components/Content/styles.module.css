@@ -1,6 +1,6 @@
 .content {
-  height: calc(100vh - 212px);
   padding: 20px 24px;
   box-sizing: border-box;
   overflow: auto;
+  flex: 1;
 }
