@@ -40,8 +40,8 @@
       "@helpers/*": [
         "./Helpers/*"
       ],
-      "@network/*": [
-        "./Network/*"
+      "@apis/*": [
+        "./APIs/*"
       ],
     }
   },

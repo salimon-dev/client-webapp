@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
 import Heading from "./Heading";
-import { nexus } from "@providers/store";
+import { register } from "@apis/auth";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function Register() {
     },
     onSubmit: async function (values) {
       setError(undefined);
-      const response = await nexus.register(values);
+      const response = await register(values);
       if (response.code === 200) {
         navigate("/");
       }

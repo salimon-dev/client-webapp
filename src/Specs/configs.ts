@@ -1,3 +1,3 @@
 export interface Configs {
-  base_url: string;
+  nexus_base_url: string;
 }

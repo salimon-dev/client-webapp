@@ -6,10 +6,10 @@ import LogoIcon from "@icons/LogoIcon";
 import ThemeIcon from "@icons/ThemeIcon";
 import LogoutIcon from "@icons/LogoutIcon";
 import { changeTheme } from "@providers/theme";
-import { nexus } from "@providers/store";
 import HeaderItem from "../HeaderItem/HeaderItem";
 import { sideOpenAtom, toggleSide } from "@providers/layout";
 import { useAtomValue } from "jotai";
+import { clearAuth } from "@providers/auth";
 export default function MainHeader() {
   const sideOpen = useAtomValue(sideOpenAtom);
   return (
@@ -37,7 +37,7 @@ export default function MainHeader() {
         <HeaderItem onClick={changeTheme}>
           <ThemeIcon />
         </HeaderItem>
-        <HeaderItem onClick={nexus.logout}>
+        <HeaderItem onClick={clearAuth}>
           <LogoutIcon />
         </HeaderItem>
       </Flex>

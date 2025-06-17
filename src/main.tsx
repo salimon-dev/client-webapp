@@ -4,10 +4,11 @@ import "@radix-ui/themes/styles.css";
 import "./index.css";
 import App from "./App/App.tsx";
 import { Provider } from "jotai";
-import { nexus, store } from "@providers/store";
+import { store } from "@providers/store";
 import { BrowserRouter } from "react-router-dom";
+import { loadAndValidateAuth } from "@providers/auth.ts";
 
-nexus.bootstrap();
+loadAndValidateAuth();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

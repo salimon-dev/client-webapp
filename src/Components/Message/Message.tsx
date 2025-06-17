@@ -1,14 +1,13 @@
-import { MessageRecord } from "@network/specs";
 import PlainMessage from "./PlainMessage";
-import ActionResultMessage from "./ActionResultMessage";
 import ActionMessage from "./ActionMessage";
+import { IMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 
 interface Props {
-  message: MessageRecord;
+  message: IMessage;
 }
 
 export default function Message({ message }: Props) {
-  if (message.type === "plain") return <PlainMessage message={message} />;
-  if (message.type === "actionResult") return <ActionResultMessage message={message} />;
+  if (message.type === MESSAGE_TYPE_PLAIN) return <PlainMessage message={message} />;
+  // if (message.type === "actionResult") return <ActionResultMessage message={message} />;
   return <ActionMessage message={message} />;
 }

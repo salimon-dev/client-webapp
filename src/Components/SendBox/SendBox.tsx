@@ -1,6 +1,4 @@
 import SendIcon from "@icons/SendIcon";
-// import { useInteractionState } from "@network/hooks";
-import { nexus } from "@providers/store";
 import { useRef, useState } from "react";
 import ActionButton from "./ActionButton";
 import Styles from "./styles.module.css";
@@ -14,15 +12,11 @@ export default function SendBox() {
   const [loading, setLoading] = useState(false);
   async function send() {
     if (!body) return;
-    if (body === "clear") {
-      await nexus.db.clearMessages();
-      setBody("");
-      return;
-    }
     try {
       setLoading(true);
       setBody("");
-      await nexus.interact({ body, from: "user", type: "plain" });
+      // TODO: implement send message
+      // await nexus.interact({ body, from: "user", type: "plain" });
     } catch (err) {
       console.log(err);
     } finally {
