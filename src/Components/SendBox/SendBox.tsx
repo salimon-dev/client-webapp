@@ -3,11 +3,15 @@ import { useRef, useState } from "react";
 import ActionButton from "./ActionButton";
 import Styles from "./styles.module.css";
 import { updateSendBoxHeight } from "@providers/layout";
-export default function SendBox() {
+
+interface IProps {
+  onSubmit: (body: string) => Promise<void>;
+  disabled?: boolean;
+}
+export default function SendBox({ onSubmit, disabled }: IProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // const interactionState = useInteractionState();
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   async function send() {
@@ -15,8 +19,7 @@ export default function SendBox() {
     try {
       setLoading(true);
       setBody("");
-      // TODO: implement send message
-      // await nexus.interact({ body, from: "user", type: "plain" });
+      await onSubmit(body);
     } catch (err) {
       console.log(err);
     } finally {
@@ -24,20 +27,8 @@ export default function SendBox() {
     }
   }
 
-  // useEffect(() => {
-  //   if (!containerRef.current || !suggestionRef.current) return;
-  //   if (showSuggestion) {
-  //     console.log("show");
-  //   } else {
-  //     console.log("hide");
-  //   }
-  // }, [showSuggestion]);
-
   return (
     <div className={Styles.container} ref={containerRef}>
-      {/* <div className={Styles.suggestion} ref={suggestionRef}>
-        some
-      </div> */}
       <textarea
         ref={inputRef}
         autoFocus
@@ -50,19 +41,11 @@ export default function SendBox() {
           if (!containerRef.current) return;
           inputRef.current.style.height = "auto";
           const h = Math.min(inputRef.current.scrollHeight - 13, 120);
-          console.log(h, inputRef.current.scrollHeight);
           inputRef.current.style.height = h + "px";
-          // containerRef.current.style.maxHeight = h + 16 + "px";
           updateSendBoxHeight(h + 16);
         }}
         onKeyDown={(event) => {
           if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) send();
-          // if (event.key === "@") {
-          //   setShowSuggestion(true);
-          // }
-          // if (event.key === "/") {
-          //   setShowSuggestion(true);
-          // }
         }}
         onPaste={(event) => {
           console.log(event);
@@ -71,10 +54,7 @@ export default function SendBox() {
         placeholder="Type here ..."
       />
       <div className={Styles.actions}>
-        {/* <div className={Styles.interactionStatus}>
-          {interactionState ? `${interactionState.name} is typing ...` : ""}
-        </div> */}
-        <ActionButton onClick={send}>
+        <ActionButton onClick={send} disabled={disabled}>
           {loading ? <span>...</span> : <SendIcon style={{ width: "18px", height: "18px" }} />}
         </ActionButton>
       </div>

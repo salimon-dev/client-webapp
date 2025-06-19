@@ -10,6 +10,7 @@ import Heading from "./Heading";
 import { login } from "@apis/auth";
 import { storeAuthResponse } from "@providers/auth";
 import { AxiosError } from "axios";
+import { setupHttpClient } from "@providers/http";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function Login() {
       try {
         const response = await login(values);
         storeAuthResponse(response, true);
+        setupHttpClient();
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

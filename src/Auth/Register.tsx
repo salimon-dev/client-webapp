@@ -8,6 +8,9 @@ import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
 import Heading from "./Heading";
 import { register } from "@apis/auth";
+import { storeAuthResponse } from "@providers/auth";
+import { setupHttpClient } from "@providers/http";
+import { AxiosError } from "axios";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -25,12 +28,17 @@ export default function Register() {
     },
     onSubmit: async function (values) {
       setError(undefined);
-      const response = await register(values);
-      if (response.code === 200) {
-        navigate("/");
-      }
-      if (response.code === 400) {
-        formik.setErrors(response.errors);
+      try {
+        const response = await register(values);
+        storeAuthResponse(response, true);
+        setupHttpClient();
+      } catch (e) {
+        const error = e as AxiosError;
+        if (error.response) {
+          setError("something went wrong");
+        } else {
+          setError("something went wrong");
+        }
       }
     },
   });

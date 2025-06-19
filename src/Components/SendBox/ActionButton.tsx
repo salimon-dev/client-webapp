@@ -4,11 +4,16 @@ import { JSX } from "react";
 interface Props {
   children: JSX.Element;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-export default function ActionButton({ children, onClick }: Props) {
+export default function ActionButton({ children, onClick, disabled }: Props) {
+  const classes = [Styles.actionButton];
+  if (disabled) {
+    classes.push(Styles.actionButtonDisabled);
+  }
   return (
-    <div className={Styles.actionButton} onClick={onClick}>
+    <div className={classes.join(" ")} onClick={onClick}>
       {children}
     </div>
   );

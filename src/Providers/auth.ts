@@ -39,8 +39,9 @@ export function loadAuthFromLocalStorage(): IAuthResponse | undefined {
   }
 }
 
-export async function validateAuthResponse(data: IAuthResponse, baseURL: string): Promise<boolean> {
+export async function validateAuthResponse(data: IAuthResponse): Promise<boolean> {
   try {
+    const baseURL = store.get(baseUrlAtom);
     await axios
       .get("/auth/profile", {
         headers: { Authorization: "Bearer " + data.access_token },
@@ -60,21 +61,20 @@ export async function validateAuthResponse(data: IAuthResponse, baseURL: string)
 export async function loadAndValidateAuth() {
   store.set(bootstrapStateAtom, "loading");
   await loadConfigs();
-  const baseURL = store.get(baseUrlAtom)!;
-  setupHttpClient(baseURL);
+  setupHttpClient();
   const authData = loadAuthFromLocalStorage();
   if (!authData) {
     store.set(bootstrapStateAtom, "done");
     return;
   }
-  const result = await validateAuthResponse(authData, baseURL);
+  const result = await validateAuthResponse(authData);
   if (!result) {
     clearAuth();
     store.set(bootstrapStateAtom, "done");
     return;
   }
   storeAuthResponse(authData);
-  setupHttpClient(baseURL);
+  setupHttpClient();
   store.set(bootstrapStateAtom, "done");
 }
 

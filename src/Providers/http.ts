@@ -1,10 +1,12 @@
 import axios from "axios";
 import { store } from "./store";
 import { accessTokenAtom } from "./auth";
+import { baseUrlAtom } from "./configs";
 
 export let httpClient = axios.create({});
 
-export function setupHttpClient(baseURL: string) {
+export function setupHttpClient() {
+  const baseURL = store.get(baseUrlAtom);
   const accessToken = store.get(accessTokenAtom);
   httpClient = axios.create({ headers: { Authorization: `Bearer ${accessToken}` }, baseURL });
 }

@@ -67,3 +67,8 @@
   font-size: var(--font-size-2);
   margin-right: auto;
 }
+
+.actionButtonDisabled {
+  background: var(--accent-3);
+  cursor: not-allowed;
+}
