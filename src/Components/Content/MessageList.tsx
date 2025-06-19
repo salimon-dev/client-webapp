@@ -2,9 +2,13 @@ import { Flex } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
 import { useAtomValue } from "jotai";
 import { sendBoxHeightAtom } from "@providers/layout";
+import { IMessage } from "@specs/threads";
+import Message from "@components/Message/Message";
 
-export default function MessageList() {
-  // const messages = useMessages();
+interface IProps {
+  messages: IMessage[];
+}
+export default function MessageList({ messages }: IProps) {
   const sendBoxHeight = useAtomValue(sendBoxHeightAtom);
   return (
     <Flex
@@ -13,11 +17,9 @@ export default function MessageList() {
       gap="3"
       style={{ maxHeight: `calc(100vh - ${sendBoxHeight}px)` }}
     >
-      <div>no message</div>
-      {/* TODO: Add messages here */}
-      {/* {messages.map((item) => (
-        <Messsage message={item} key={item.id} />
-      ))} */}
+      {messages.map((item) => (
+        <Message message={item} key={item.id} />
+      ))}
     </Flex>
   );
 }

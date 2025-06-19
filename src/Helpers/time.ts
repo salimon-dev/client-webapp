@@ -1,7 +1,7 @@
 import moment from "moment";
 
 export function tsToDateString(ts: number) {
-  const m = moment(ts);
+  const m = moment(ts * 1000);
   if (m.diff(moment(), "days") < 1) {
     return m.fromNow();
   }

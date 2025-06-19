@@ -20,6 +20,7 @@ export interface IMessage {
   updated_at: number;
   thread_id: string;
   user_id: string;
+  username: string;
   body: string;
   type: number;
 }

@@ -13,10 +13,14 @@ export default function PlainMessage({ message }: Props) {
     <Box className={Styles.messageBox}>
       <Flex direction="column" gap="2">
         <Flex direction="row" style={{ justifyContent: "space-between", alignItems: "center", height: 38 }}>
-          <Box>{/* <Avatar from={message.from} /> */}</Box>
+          <Box>
+            <Text size="3" style={{ color: "var(--gray-10)" }}>
+              {message.username}
+            </Text>
+          </Box>
           <Box className={Styles.messageDate}>{tsToDateString(message.updated_at)}</Box>
         </Flex>
-        <Text>{message.body}</Text>
+        <Text size="2">{message.body}</Text>
       </Flex>
     </Box>
   );

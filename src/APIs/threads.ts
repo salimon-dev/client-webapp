@@ -30,3 +30,12 @@ export async function searchThreads(params: ISearchThreadsParams) {
 export async function deleteThread(threadId: string) {
   return httpClient.delete(`/member/threads/${threadId}`).then((response) => response.data);
 }
+
+interface ISearchMessageParams extends ISearchParams {
+  thread_id: string;
+}
+export async function searchMessages(params: ISearchMessageParams) {
+  return httpClient
+    .get<ICollection<IMessage>>("/member/messages", { params })
+    .then((response) => response.data);
+}
