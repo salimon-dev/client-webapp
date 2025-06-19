@@ -39,3 +39,11 @@ export async function searchMessages(params: ISearchMessageParams) {
     .get<ICollection<IMessage>>("/member/messages", { params })
     .then((response) => response.data);
 }
+
+interface ISendMessageParams {
+  thread_id: string;
+  body: string;
+}
+export async function sendMessage(params: ISendMessageParams) {
+  return httpClient.post<IMessage>("/member/messages/send", params).then((response) => response.data);
+}
