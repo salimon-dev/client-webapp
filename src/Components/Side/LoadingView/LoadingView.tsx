@@ -1,9 +1,9 @@
 import { Flex, Text } from "@radix-ui/themes";
 
-export default function NoThreadScreen() {
+export default function LoadingView() {
   return (
     <Flex style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-      <Text>There are no threads yet</Text>
+      <Text>loading threads</Text>
     </Flex>
   );
 }
