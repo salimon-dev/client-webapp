@@ -2,6 +2,7 @@ import { Box, Flex, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
 import { IMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 import { tsToDateString } from "@helpers/time";
+import Avatar from "./Avatar";
 
 interface Props {
   message: IMessage;
@@ -14,9 +15,7 @@ export default function PlainMessage({ message }: Props) {
       <Flex direction="column" gap="2">
         <Flex direction="row" style={{ justifyContent: "space-between", alignItems: "center", height: 38 }}>
           <Box>
-            <Text size="3" style={{ color: "var(--gray-10)" }}>
-              {message.username}
-            </Text>
+            <Avatar from={message.username} />
           </Box>
           <Box className={Styles.messageDate}>{tsToDateString(message.updated_at)}</Box>
         </Flex>
