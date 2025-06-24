@@ -5,31 +5,24 @@ import { useAtomValue } from "jotai";
 import { sideOpenAtom } from "@providers/layout";
 import Styles from "./styles.module.css";
 import NoThreadScreen from "@components/Side/NoThreadView/NoThreadView";
-import { useQuery } from "@tanstack/react-query";
-import { searchThreads } from "@apis/threads";
 import ThreadItem from "@components/ThreadItem/ThreadItem";
-import { threadSearchQueryAtom } from "@providers/local";
 import LoadingView from "./LoadingView/LoadingView";
+import { useLoadingThreads, useThreads } from "@helpers/hooks";
 
 export default function Side() {
   const sideRef = useRef<HTMLDivElement>(null);
   const sideOpen = useAtomValue(sideOpenAtom);
-  const query = useAtomValue(threadSearchQueryAtom);
-  const { isLoading, data } = useQuery({
-    queryKey: ["threads", query],
-    queryFn: async () => {
-      return searchThreads({ page: 1, page_size: 32, name: query });
-    },
-  });
+
+  const threads = useThreads();
+  const isLoading = useLoadingThreads();
+
   function threadsList() {
     if (isLoading) return;
-    if (!data) return;
-    return data.data.map((thread) => <ThreadItem key={thread.id} thread={thread} />);
+    return threads.map((thread) => <ThreadItem key={thread.id} thread={thread} />);
   }
   function noThreadScreen() {
     if (isLoading) return;
-    if (!data) return;
-    if (data.data.length > 0) return;
+    if (threads.length > 0) return;
     return <NoThreadScreen />;
   }
   function loading() {

@@ -5,13 +5,17 @@ import SelectUserForm from "@components/SelectUserForm/SelectUserForm";
 import { useState } from "react";
 import { IUser } from "@specs/users";
 import { startThread } from "@apis/threads";
+import { useNavigate } from "react-router-dom";
+import { loadThreads } from "@providers/local";
 
 export default function BlankChat() {
   const [selectedUser, setSelectedUser] = useState<IUser>();
+  const navigate = useNavigate();
   async function handleOnSubmit(body: string) {
     if (!selectedUser) return;
     const response = await startThread({ target_id: selectedUser.id, message: body });
-    console.log(response);
+    navigate(`/thread/${response.thread.id}`);
+    loadThreads();
   }
   return (
     <Flex direction="column" style={{ flex: 1 }}>

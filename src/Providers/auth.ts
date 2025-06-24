@@ -5,6 +5,7 @@ import { IProfile } from "@specs/users";
 import { IAuthResponse } from "@specs/auth";
 import { setupHttpClient } from "./http";
 import { baseUrlAtom, loadConfigs } from "./configs";
+import { loadThreads } from "./local";
 
 export const bootstrapStateAtom = atom<"init" | "loading" | "done">("init");
 export const accessTokenAtom = atom<string>();
@@ -75,6 +76,7 @@ export async function loadAndValidateAuth() {
   }
   storeAuthResponse(authData);
   setupHttpClient();
+  loadThreads();
   store.set(bootstrapStateAtom, "done");
 }
 

@@ -2,24 +2,21 @@ import { Flex } from "@radix-ui/themes";
 import MainHeader from "../../Components/MainHeader/MainHeader";
 import SendBox from "@components/SendBox/SendBox";
 import MessageList from "@components/Content/MessageList";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { searchMessages, sendMessage } from "@apis/threads";
+import { sendMessage } from "@apis/threads";
+import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
+import { useEffect } from "react";
+import { loadMessages } from "@providers/local";
 
 export default function Thread() {
   const { id: threadId } = useParams() as { id: string };
-  const { data, isLoading } = useQuery({
-    queryKey: ["messages", threadId],
-    queryFn: () => {
-      return searchMessages({ page: 1, page_size: 10, thread_id: threadId });
-    },
-  });
+  const isLoading = useLoadingLastMessages(threadId);
+  const messages = useThreadMessages(threadId);
 
-  function messages() {
-    if (isLoading) return [];
-    if (!data) return [];
-    return data.data;
-  }
+  useEffect(() => {
+    loadMessages(threadId);
+  }, [threadId]);
+
   async function submit(body: string) {
     try {
       const response = await sendMessage({ body, thread_id: threadId });
@@ -31,7 +28,7 @@ export default function Thread() {
   return (
     <Flex direction="column" style={{ flex: 1 }}>
       <MainHeader />
-      <MessageList messages={messages()} />
+      {!isLoading && <MessageList messages={messages} />}
       <SendBox onSubmit={submit} />
     </Flex>
   );

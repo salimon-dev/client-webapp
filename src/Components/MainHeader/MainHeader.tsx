@@ -7,22 +7,24 @@ import ThemeIcon from "@icons/ThemeIcon";
 import LogoutIcon from "@icons/LogoutIcon";
 import { changeTheme } from "@providers/theme";
 import HeaderItem from "../HeaderItem/HeaderItem";
-import { sideOpenAtom, toggleSide } from "@providers/layout";
-import { useAtomValue } from "jotai";
+import { toggleSide } from "@providers/layout";
 import { clearAuth } from "@providers/auth";
+import { useNavigate } from "react-router-dom";
 export default function MainHeader() {
-  const sideOpen = useAtomValue(sideOpenAtom);
+  const navigate = useNavigate();
   return (
     <Flex direction="row" className={Styles.mainHeader}>
       <Flex direction="row">
         <HeaderItem onClick={toggleSide}>
           <MenuIcon />
         </HeaderItem>
-        {!sideOpen && (
-          <HeaderItem>
-            <AddIcon />
-          </HeaderItem>
-        )}
+        <HeaderItem
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          <AddIcon />
+        </HeaderItem>
       </Flex>
       <Box className={Styles.logo}>
         <LogoIcon style={{ height: 32, width: 32 }} />
