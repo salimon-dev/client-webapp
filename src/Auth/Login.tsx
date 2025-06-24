@@ -11,6 +11,7 @@ import { login } from "@apis/auth";
 import { storeAuthResponse } from "@providers/auth";
 import { AxiosError } from "axios";
 import { setupHttpClient } from "@providers/http";
+import { loadThreads } from "@providers/local";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function Login() {
         const response = await login(values);
         storeAuthResponse(response, true);
         setupHttpClient();
+        loadThreads();
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

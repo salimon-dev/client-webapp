@@ -11,6 +11,7 @@ import { register } from "@apis/auth";
 import { storeAuthResponse } from "@providers/auth";
 import { setupHttpClient } from "@providers/http";
 import { AxiosError } from "axios";
+import { loadThreads } from "@providers/local";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function Register() {
         const response = await register(values);
         storeAuthResponse(response, true);
         setupHttpClient();
+        loadThreads();
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

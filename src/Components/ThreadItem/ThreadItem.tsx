@@ -4,6 +4,9 @@ import MenuIcon from "@icons/MenuIcon";
 import { IThread } from "@specs/threads";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@icons/DeleteIcon";
+import UserIcon from "@icons/UserIcon";
+import { deleteThread } from "@apis/threads";
+import { loadThreads } from "@providers/local";
 
 interface IProps {
   thread: IThread;
@@ -13,7 +16,7 @@ export default function ThreadItem({ thread }: IProps) {
   return (
     <Flex direction="row" className={Styles.container} onClick={() => navigate(`/thread/${thread.id}`)}>
       <div className={Styles.icon}>
-        <img src="/logo.png" />
+        <UserIcon />
       </div>
       <div className={Styles.title}>{thread.name}</div>
       <div
@@ -32,6 +35,10 @@ export default function ThreadItem({ thread }: IProps) {
             <Button
               style={{ display: "flex", justifyContent: "start", alignItems: "center" }}
               variant="ghost"
+              onClick={async () => {
+                await deleteThread(thread.id);
+                await loadThreads();
+              }}
             >
               <DeleteIcon style={{ width: 16, height: 16 }} />
               <Text style={{ marginTop: 5, marginLeft: 4 }}>Delete</Text>
