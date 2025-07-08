@@ -38,3 +38,8 @@ export async function loadMessages(threadId: string) {
     setLoadingMessages(threadId, false);
   }
 }
+
+export async function appendMessage(message: IMessage) {
+  const records = store.get(messagesAtom);
+  store.set(messagesAtom, [...records, message]);
+}

@@ -1,11 +1,13 @@
 import { WebSocketEvent } from "@specs/websocket";
 import { wsBaseUrlAtom } from "./configs";
 import { store } from "./store";
-import { filter, Subject } from "rxjs";
+import { first, Subject } from "rxjs";
 import { accessTokenAtom } from "./auth";
+import { atom } from "jotai";
 
 export let wsConnection: WebSocket | undefined = undefined;
 export const wsEvents = new Subject<WebSocketEvent>();
+export const wsStateAtom = atom<"init" | "connected" | "disconnected" | "authenticated">("init");
 
 export async function setupWebsocketConnection() {
   const url = store.get(wsBaseUrlAtom);
@@ -17,12 +19,16 @@ export async function setupWebsocketConnection() {
     wsConnection = new WebSocket(url);
     wsConnection.onopen = () => {
       resolve();
+      store.set(wsStateAtom, "connected");
       console.log("websocket connected");
     };
     wsConnection.onerror = (e) => console.error(e);
-    wsConnection.onclose = () => console.log("websocket disconnected");
+    wsConnection.onclose = () => {
+      store.set(wsStateAtom, "disconnected");
+      console.log("websocket disconnected");
+    };
     wsConnection.onmessage = (payload) => {
-      const data = payload.data as WebSocketEvent;
+      const data = JSON.parse(payload.data) as WebSocketEvent;
       wsEvents.next(data);
     };
   });
@@ -33,9 +39,17 @@ export async function setupWebsocketAuthentication() {
   if (!wsConnection) return false;
   if (!accessToken) return false;
   const result = new Promise<boolean>((resolve) => {
-    wsEvents.pipe(filter((event) => event.action === "AUTH")).subscribe((event) => {
-      resolve(event.result);
-    });
+    wsEvents
+      .pipe(
+        // filter(({ action }) => action === "AUTH"),
+        first((event) => event.action === "AUTH")
+      )
+      .subscribe((event) => {
+        resolve(event.result);
+        if (event.result) {
+          store.set(wsStateAtom, "authenticated");
+        }
+      });
   });
   wsConnection.send(JSON.stringify({ action: "AUTH", access_token: accessToken }));
   return result;
