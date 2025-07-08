@@ -4,7 +4,7 @@ import { atom } from "jotai";
 import { IProfile } from "@specs/users";
 import { IAuthResponse } from "@specs/auth";
 import { setupHttpClient } from "./http";
-import { baseUrlAtom, loadConfigs } from "./configs";
+import { apiBaseUrlAtom, loadConfigs } from "./configs";
 import { loadThreads } from "./local";
 
 export const bootstrapStateAtom = atom<"init" | "loading" | "done">("init");
@@ -42,7 +42,7 @@ export function loadAuthFromLocalStorage(): IAuthResponse | undefined {
 
 export async function validateAuthResponse(data: IAuthResponse): Promise<boolean> {
   try {
-    const baseURL = store.get(baseUrlAtom);
+    const baseURL = store.get(apiBaseUrlAtom);
     await axios
       .get("/auth/profile", {
         headers: { Authorization: "Bearer " + data.access_token },
