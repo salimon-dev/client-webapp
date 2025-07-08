@@ -12,6 +12,7 @@ import { storeAuthResponse } from "@providers/auth";
 import { AxiosError } from "axios";
 import { setupHttpClient } from "@providers/http";
 import { loadThreads } from "@providers/local";
+import { setupWebsocketAuthentication } from "@providers/websocket";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ export default function Login() {
         storeAuthResponse(response, true);
         setupHttpClient();
         loadThreads();
+        setupWebsocketAuthentication();
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {

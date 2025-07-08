@@ -12,6 +12,7 @@ import { storeAuthResponse } from "@providers/auth";
 import { setupHttpClient } from "@providers/http";
 import { AxiosError } from "axios";
 import { loadThreads } from "@providers/local";
+import { setupWebsocketAuthentication } from "@providers/websocket";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function Register() {
         storeAuthResponse(response, true);
         setupHttpClient();
         loadThreads();
+        setupWebsocketAuthentication();
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {
