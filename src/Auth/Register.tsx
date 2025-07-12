@@ -36,6 +36,7 @@ export default function Register() {
         setupHttpClient();
         loadThreads();
         setupWebsocketAuthentication();
+        navigate("/");
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {
