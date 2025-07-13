@@ -5,7 +5,7 @@ import TextInput from "@components/Inputs/TextInput";
 import UserRecord from "./UserRecord/UserRecord";
 import { IUser } from "@specs/users";
 import { useEffect, useRef, useState } from "react";
-import { searchUsers } from "@apis/users";
+import { searchUserByUsername, searchUsers } from "@apis/users";
 import MessageView from "./MessageView/MessageView";
 
 interface IProps {
@@ -27,8 +27,14 @@ export default function SelectUserForm({ onUserSelected, selectedUser }: IProps)
     }
     queryDebounceRef.current = setTimeout(async () => {
       try {
-        const res = await searchUsers({ page: 1, page_size: 4, username: query });
-        setUsers(res.data);
+        const results: IUser[] = [];
+        if (query) {
+          const usernameUser = await searchUserByUsername(query);
+          if (usernameUser) results.push(usernameUser);
+        }
+        const publicUsers = await searchUsers({ page: 1, page_size: 4, username: query });
+        publicUsers.data.forEach((item) => results.push(item));
+        setUsers(results);
       } finally {
         setIsFetching(false);
       }

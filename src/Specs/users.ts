@@ -3,12 +3,12 @@ export interface IUser {
   registered_at: number;
   updated_at: number;
   username: string;
-  base_url: string;
+  description: string;
 }
 
 export interface IProfile extends IUser {
   credit: number;
   score: number;
   status: number;
-  is_public: boolean;
+  visibility: number;
 }
