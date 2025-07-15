@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { sendMessage } from "@apis/threads";
 import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
 import { useEffect } from "react";
-import { loadMessages } from "@providers/local";
+import { appendMessage, loadMessages } from "@providers/local";
 
 export default function Thread() {
   const { id: threadId } = useParams() as { id: string };
@@ -20,7 +20,7 @@ export default function Thread() {
   async function submit(body: string) {
     try {
       const response = await sendMessage({ body, thread_id: threadId });
-      console.log(response);
+      appendMessage(response);
     } catch (e) {
       console.error(e);
     }

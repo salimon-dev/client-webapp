@@ -1,9 +1,10 @@
-import { WebSocketEvent } from "@specs/websocket";
+import { AuthEvent, MessageEvent, ThreadEvent, WebSocketEvent } from "@specs/websocket";
 import { wsBaseUrlAtom } from "./configs";
 import { store } from "./store";
-import { first, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { accessTokenAtom } from "./auth";
 import { atom } from "jotai";
+import { appendMessage, deleteThread, putThread } from "./local";
 
 export let wsConnection: WebSocket | undefined = undefined;
 export const wsEvents = new Subject<WebSocketEvent>();
@@ -31,6 +32,16 @@ export async function setupWebsocketConnection() {
       const data = JSON.parse(payload.data) as WebSocketEvent;
       wsEvents.next(data);
     };
+    wsEvents.subscribe((event) => {
+      switch (event.action) {
+        case "AUTH":
+          return handleAuthEvent(event);
+        case "MESSAGE":
+          return handleMessageEvent(event);
+        case "THREAD":
+          return handleThreadEvent(event);
+      }
+    });
   });
 }
 
@@ -38,19 +49,29 @@ export async function setupWebsocketAuthentication() {
   const accessToken = store.get(accessTokenAtom);
   if (!wsConnection) return false;
   if (!accessToken) return false;
-  const result = new Promise<boolean>((resolve) => {
-    wsEvents
-      .pipe(
-        // filter(({ action }) => action === "AUTH"),
-        first((event) => event.action === "AUTH")
-      )
-      .subscribe((event) => {
-        resolve(event.result);
-        if (event.result) {
-          store.set(wsStateAtom, "authenticated");
-        }
-      });
-  });
   wsConnection.send(JSON.stringify({ action: "AUTH", access_token: accessToken }));
-  return result;
+}
+
+function handleAuthEvent(event: AuthEvent): void {
+  if (event.result) {
+    store.set(wsStateAtom, "authenticated");
+  } else {
+    store.set(wsStateAtom, "connected");
+  }
+}
+
+function handleMessageEvent(event: MessageEvent): void {
+  const message = event.message;
+  appendMessage(message);
+}
+
+function handleThreadEvent(event: ThreadEvent): void {
+  switch (event.type) {
+    case "CREATE":
+    case "UPDATE":
+      putThread(event.thread);
+      break;
+    case "DELETE":
+      deleteThread(event.thread);
+  }
 }

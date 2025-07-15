@@ -41,5 +41,22 @@ export async function loadMessages(threadId: string) {
 
 export async function appendMessage(message: IMessage) {
   const records = store.get(messagesAtom);
-  store.set(messagesAtom, [...records, message]);
+  if (records.some((item) => item.id === message.id)) return;
+  store.set(messagesAtom, [message, ...records]);
+}
+
+export async function putThread(thread: IThread) {
+  const records = store.get(threadsAtom);
+  if (records.some((item) => item.id === thread.id)) {
+    store.set(
+      threadsAtom,
+      records.map((item) => (item.id === thread.id ? thread : item))
+    );
+  } else {
+    store.set(threadsAtom, [...records, thread]);
+  }
+}
+
+export async function deleteThread(thread: IThread) {
+  store.set(threadsAtom, (state) => state.filter((item) => item.id !== thread.id));
 }

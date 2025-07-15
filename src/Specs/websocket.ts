@@ -1,4 +1,4 @@
-import { IMessage } from "./threads";
+import { IMessage, IThread } from "./threads";
 
 export type AuthEvent = {
   action: "AUTH";
@@ -7,7 +7,13 @@ export type AuthEvent = {
 
 export type MessageEvent = {
   action: "MESSAGE";
-  data: IMessage;
+  message: IMessage;
 };
 
-export type WebSocketEvent = AuthEvent | MessageEvent;
+export type ThreadEvent = {
+  action: "THREAD";
+  thread: IThread;
+  type: "CREATE" | "UPDATE" | "DELETE";
+};
+
+export type WebSocketEvent = AuthEvent | MessageEvent | ThreadEvent;
