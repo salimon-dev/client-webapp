@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  overflow: auto;
+  flex: 1;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 430px;
+  flex: 1;
+  margin-top: 60px;
+  gap: 12px;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.loading > svg {
+  height: 64px;
+}
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

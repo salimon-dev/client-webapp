@@ -8,8 +8,10 @@ if [[ "$ENV" != "dev" && "$ENV" != "prod" ]]; then
   echo "Usage: $0 dev|prod"
   exit 1
 fi
+
+
 npm install
-npm run build
+npx vite build --mode $ENV
 
 BUCKET_NAME="salimon-client-webapp-$ENV"
 BUILD_DIR="./dist"

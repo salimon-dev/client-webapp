@@ -7,6 +7,7 @@ import { sendMessage } from "@apis/threads";
 import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
 import { useEffect } from "react";
 import { appendMessage, loadMessages } from "@providers/local";
+import ThreadContentLoading from "@components/ThreadContentLoading/ThreadContentLoading";
 
 export default function Thread() {
   const { id: threadId } = useParams() as { id: string };
@@ -29,6 +30,7 @@ export default function Thread() {
     <Flex direction="column" style={{ flex: 1 }}>
       <MainHeader />
       {!isLoading && <MessageList messages={messages} />}
+      {isLoading && <ThreadContentLoading message="loading messages ..." />}
       <SendBox onSubmit={submit} />
     </Flex>
   );
