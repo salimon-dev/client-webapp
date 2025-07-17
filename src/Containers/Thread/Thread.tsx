@@ -6,17 +6,20 @@ import { useParams } from "react-router-dom";
 import { sendMessage } from "@apis/threads";
 import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
 import { useEffect } from "react";
-import { appendMessage, loadMessages } from "@providers/local";
+import { activeThreadIdAtom, appendMessage, loadMessages } from "@providers/local";
 import ThreadContentLoading from "@components/ThreadContentLoading/ThreadContentLoading";
+import { useSetAtom } from "jotai";
 
 export default function Thread() {
   const { id: threadId } = useParams() as { id: string };
   const isLoading = useLoadingLastMessages(threadId);
   const messages = useThreadMessages(threadId);
+  const setActiveThread = useSetAtom(activeThreadIdAtom);
 
   useEffect(() => {
+    setActiveThread(threadId);
     loadMessages(threadId);
-  }, [threadId]);
+  }, [threadId, setActiveThread]);
 
   async function submit(body: string) {
     try {

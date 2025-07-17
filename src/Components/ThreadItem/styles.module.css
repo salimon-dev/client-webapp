@@ -10,6 +10,9 @@
 .container:hover {
   background: var(--gray-2);
 }
+.active {
+  background: var(--gray-3);
+}
 
 .icon {
   flex: 1;

@@ -9,7 +9,7 @@ import { searchUserByUsername, searchUsers } from "@apis/users";
 import MessageView from "./MessageView/MessageView";
 
 interface IProps {
-  onUserSelected: (user: IUser) => void;
+  onUserSelected: (user?: IUser) => void;
   selectedUser?: IUser;
 }
 export default function SelectUserForm({ onUserSelected, selectedUser }: IProps) {
@@ -35,6 +35,7 @@ export default function SelectUserForm({ onUserSelected, selectedUser }: IProps)
         const publicUsers = await searchUsers({ page: 1, page_size: 4, username: query });
         publicUsers.data.forEach((item) => results.push(item));
         setUsers(results);
+        onUserSelected(undefined);
       } finally {
         setIsFetching(false);
       }

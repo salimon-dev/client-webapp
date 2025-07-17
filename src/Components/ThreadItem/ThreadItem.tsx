@@ -6,15 +6,25 @@ import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@icons/DeleteIcon";
 import UserIcon from "@icons/UserIcon";
 import { deleteThread } from "@apis/threads";
-import { loadThreads } from "@providers/local";
+import { activeThreadIdAtom, deleteLocalThread, loadThreads } from "@providers/local";
+import { useAtomValue } from "jotai";
 
 interface IProps {
   thread: IThread;
 }
 export default function ThreadItem({ thread }: IProps) {
   const navigate = useNavigate();
+  const activeThreadId = useAtomValue(activeThreadIdAtom);
+
+  function containerClasses() {
+    const classes = [Styles.container];
+    if (thread.id === activeThreadId) {
+      classes.push(Styles.active);
+    }
+    return classes.join(" ");
+  }
   return (
-    <Flex direction="row" className={Styles.container} onClick={() => navigate(`/thread/${thread.id}`)}>
+    <Flex direction="row" className={containerClasses()} onClick={() => navigate(`/thread/${thread.id}`)}>
       <div className={Styles.icon}>
         <UserIcon />
       </div>
@@ -36,8 +46,9 @@ export default function ThreadItem({ thread }: IProps) {
               style={{ display: "flex", justifyContent: "start", alignItems: "center" }}
               variant="ghost"
               onClick={async () => {
+                await deleteLocalThread(thread);
                 await deleteThread(thread.id);
-                await loadThreads();
+                await loadThreads(true);
               }}
             >
               <DeleteIcon style={{ width: 16, height: 16 }} />

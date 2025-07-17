@@ -4,17 +4,18 @@ import { atom } from "jotai";
 import { store } from "./store";
 
 export const threadsSearchQueryAtom = atom<string>("");
+export const activeThreadIdAtom = atom<string>();
 export const threadsAtom = atom<IThread[]>([]);
 export const messagesAtom = atom<IMessage[]>([]);
 export const loadingThreadsAtom = atom<boolean>(false);
 export const loadingMessagesAtom = atom<string[]>([]);
 
-export async function loadThreads() {
-  store.set(loadingThreadsAtom, true);
+export async function loadThreads(silent = false) {
+  if (!silent) store.set(loadingThreadsAtom, true);
   const name = store.get(threadsSearchQueryAtom);
   const response = await searchThreads({ page: 1, page_size: 10, name });
   store.set(threadsAtom, response.data);
-  store.set(loadingThreadsAtom, false);
+  if (!silent) store.set(loadingThreadsAtom, false);
 }
 
 function setLoadingMessages(threadId: string, value: boolean) {
@@ -57,6 +58,6 @@ export async function putThread(thread: IThread) {
   }
 }
 
-export async function deleteThread(thread: IThread) {
+export async function deleteLocalThread(thread: IThread) {
   store.set(threadsAtom, (state) => state.filter((item) => item.id !== thread.id));
 }

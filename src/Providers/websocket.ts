@@ -4,7 +4,7 @@ import { store } from "./store";
 import { Subject } from "rxjs";
 import { accessTokenAtom } from "./auth";
 import { atom } from "jotai";
-import { appendMessage, deleteThread, putThread } from "./local";
+import { appendMessage, deleteLocalThread, putThread } from "./local";
 
 export let wsConnection: WebSocket | undefined = undefined;
 export const wsEvents = new Subject<WebSocketEvent>();
@@ -72,6 +72,6 @@ function handleThreadEvent(event: ThreadEvent): void {
       putThread(event.thread);
       break;
     case "DELETE":
-      deleteThread(event.thread);
+      deleteLocalThread(event.thread);
   }
 }
