@@ -24,3 +24,7 @@ export interface IMessage {
   body: string;
   type: number;
 }
+
+export interface ILocalMessage extends IMessage {
+  sendStatus: "pending" | "failed" | "done";
+}

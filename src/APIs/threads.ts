@@ -1,5 +1,5 @@
 import { httpClient } from "@providers/http";
-import { IMessage, IThread, IThreadMember } from "@specs/threads";
+import { ILocalMessage, IMessage, IThread, IThreadMember } from "@specs/threads";
 import { ICollection, ISearchParams } from "./common";
 
 interface IStartThreadParams {
@@ -34,10 +34,14 @@ export async function deleteThread(threadId: string) {
 interface ISearchMessageParams extends ISearchParams {
   thread_id: string;
 }
-export async function searchMessages(params: ISearchMessageParams) {
+export async function searchMessages(params: ISearchMessageParams): Promise<ICollection<ILocalMessage>> {
   return httpClient
     .get<ICollection<IMessage>>("/member/messages", { params })
-    .then((response) => response.data);
+    .then((response) => response.data)
+    .then((response) => ({
+      ...response,
+      data: response.data.map((item) => ({ ...item, sendStatus: "done" })),
+    }));
 }
 
 interface ISendMessageParams {

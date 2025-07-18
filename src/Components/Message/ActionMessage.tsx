@@ -1,10 +1,10 @@
 import { Box, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
 import CircleIcon from "@icons/CircleIcon";
-import { IMessage } from "@specs/threads";
+import { ILocalMessage } from "@specs/threads";
 
 interface Props {
-  message: IMessage;
+  message: ILocalMessage;
 }
 
 export default function ActionMessage({ message }: Props) {

@@ -6,12 +6,15 @@ import { useParams } from "react-router-dom";
 import { sendMessage } from "@apis/threads";
 import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
 import { useEffect } from "react";
-import { activeThreadIdAtom, appendMessage, loadMessages } from "@providers/local";
+import { activeThreadIdAtom, appendLocalMessage, appendRemoteMessage, loadMessages } from "@providers/local";
 import ThreadContentLoading from "@components/ThreadContentLoading/ThreadContentLoading";
 import { useSetAtom } from "jotai";
+import { MESSAGE_TYPE_PLAIN } from "@specs/threads";
+import { useProfile } from "@providers/auth";
 
 export default function Thread() {
   const { id: threadId } = useParams() as { id: string };
+  const profile = useProfile();
   const isLoading = useLoadingLastMessages(threadId);
   const messages = useThreadMessages(threadId);
   const setActiveThread = useSetAtom(activeThreadIdAtom);
@@ -23,8 +26,20 @@ export default function Thread() {
 
   async function submit(body: string) {
     try {
+      const localMessageId = Date.now() + "";
+      appendLocalMessage({
+        id: localMessageId,
+        body,
+        created_at: Math.ceil(Date.now() / 1000),
+        updated_at: Math.ceil(Date.now() / 1000),
+        thread_id: threadId,
+        type: MESSAGE_TYPE_PLAIN,
+        user_id: profile!.id,
+        username: profile!.username,
+        sendStatus: "pending",
+      });
       const response = await sendMessage({ body, thread_id: threadId });
-      appendMessage(response);
+      appendRemoteMessage(response, localMessageId);
     } catch (e) {
       console.error(e);
     }

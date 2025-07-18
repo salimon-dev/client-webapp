@@ -2,9 +2,9 @@ import { AuthEvent, MessageEvent, ThreadEvent, WebSocketEvent } from "@specs/web
 import { wsBaseUrlAtom } from "./configs";
 import { store } from "./store";
 import { Subject } from "rxjs";
-import { accessTokenAtom } from "./auth";
+import { accessTokenAtom, profileAtom } from "./auth";
 import { atom } from "jotai";
-import { appendMessage, deleteLocalThread, putThread } from "./local";
+import { appendRemoteMessage, deleteLocalThread, putThread } from "./local";
 
 export let wsConnection: WebSocket | undefined = undefined;
 export const wsEvents = new Subject<WebSocketEvent>();
@@ -62,7 +62,12 @@ function handleAuthEvent(event: AuthEvent): void {
 
 function handleMessageEvent(event: MessageEvent): void {
   const message = event.message;
-  appendMessage(message);
+  const profile = store.get(profileAtom);
+  // client is the origin of this message
+  if (message.user_id === profile!.id) {
+    return;
+  }
+  appendRemoteMessage(message);
 }
 
 function handleThreadEvent(event: ThreadEvent): void {

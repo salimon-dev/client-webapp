@@ -1,11 +1,11 @@
 import { Box, Flex, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
-import { IMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
+import { ILocalMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 import { tsToDateString } from "@helpers/time";
 import Avatar from "./Avatar";
 
 interface Props {
-  message: IMessage;
+  message: ILocalMessage;
 }
 
 export default function PlainMessage({ message }: Props) {
@@ -17,10 +17,21 @@ export default function PlainMessage({ message }: Props) {
           <Box>
             <Avatar from={message.username} />
           </Box>
-          <Box className={Styles.messageDate}>{tsToDateString(message.updated_at)}</Box>
+          <MessageDate message={message} />
         </Flex>
         <Text size="2">{message.body}</Text>
       </Flex>
     </Box>
   );
+}
+
+function MessageDate({ message }: Props) {
+  switch (message.sendStatus) {
+    case "done":
+      return <Box className={Styles.messageDate}>{tsToDateString(message.updated_at)}</Box>;
+    case "pending":
+      return <Box className={Styles.messageDate}>sending</Box>;
+    case "failed":
+      return <Box className={Styles.messageDate}>failed</Box>;
+  }
 }

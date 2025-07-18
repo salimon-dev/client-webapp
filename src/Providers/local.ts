@@ -1,12 +1,12 @@
 import { searchMessages, searchThreads } from "@apis/threads";
-import { IMessage, IThread } from "@specs/threads";
+import { ILocalMessage, IMessage, IThread } from "@specs/threads";
 import { atom } from "jotai";
 import { store } from "./store";
 
 export const threadsSearchQueryAtom = atom<string>("");
 export const activeThreadIdAtom = atom<string>();
 export const threadsAtom = atom<IThread[]>([]);
-export const messagesAtom = atom<IMessage[]>([]);
+export const messagesAtom = atom<ILocalMessage[]>([]);
 export const loadingThreadsAtom = atom<boolean>(false);
 export const loadingMessagesAtom = atom<string[]>([]);
 
@@ -40,10 +40,19 @@ export async function loadMessages(threadId: string) {
   }
 }
 
-export async function appendMessage(message: IMessage) {
-  const records = store.get(messagesAtom);
+export async function appendRemoteMessage(message: IMessage, localMessageId?: string) {
+  let records = store.get(messagesAtom);
   if (records.some((item) => item.id === message.id)) return;
-  store.set(messagesAtom, [message, ...records]);
+  if (localMessageId) {
+    records = records.filter((item) => item.id !== localMessageId);
+  }
+  store.set(messagesAtom, [{ ...message, sendStatus: "done" }, ...records]);
+}
+
+export async function appendLocalMessage(localMessage: ILocalMessage) {
+  const records = store.get(messagesAtom);
+  if (records.some((item) => item.id === localMessage.id)) return;
+  store.set(messagesAtom, [localMessage, ...records]);
 }
 
 export async function putThread(thread: IThread) {

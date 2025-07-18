@@ -1,9 +1,9 @@
 import PlainMessage from "./PlainMessage";
 import ActionMessage from "./ActionMessage";
-import { IMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
+import { ILocalMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 
 interface Props {
-  message: IMessage;
+  message: ILocalMessage;
 }
 
 export default function Message({ message }: Props) {
