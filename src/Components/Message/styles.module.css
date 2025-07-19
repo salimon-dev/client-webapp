@@ -28,3 +28,7 @@
   font-size: var(--font-size-1);
   font-style: italic;
 }
+.messageDate > svg {
+  width: 16px;
+  height: 16px;
+}

@@ -3,6 +3,7 @@ import Styles from "./styles.module.css";
 import { ILocalMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 import { tsToDateString } from "@helpers/time";
 import Avatar from "./Avatar";
+import LoadingIcon from "@icons/LoadingIcon";
 
 interface Props {
   message: ILocalMessage;
@@ -30,7 +31,11 @@ function MessageDate({ message }: Props) {
     case "done":
       return <Box className={Styles.messageDate}>{tsToDateString(message.updated_at)}</Box>;
     case "pending":
-      return <Box className={Styles.messageDate}>sending</Box>;
+      return (
+        <Box className={Styles.messageDate}>
+          <LoadingIcon />
+        </Box>
+      );
     case "failed":
       return <Box className={Styles.messageDate}>failed</Box>;
   }

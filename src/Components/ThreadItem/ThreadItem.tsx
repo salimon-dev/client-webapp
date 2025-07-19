@@ -2,7 +2,7 @@ import { Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
 import MenuIcon from "@icons/MenuIcon";
 import { IThread } from "@specs/threads";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import DeleteIcon from "@icons/DeleteIcon";
 import UserIcon from "@icons/UserIcon";
 import { deleteThread } from "@apis/threads";
@@ -14,6 +14,7 @@ interface IProps {
 }
 export default function ThreadItem({ thread }: IProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const activeThreadId = useAtomValue(activeThreadIdAtom);
 
   function containerClasses() {
@@ -47,6 +48,9 @@ export default function ThreadItem({ thread }: IProps) {
               variant="ghost"
               onClick={async () => {
                 await deleteLocalThread(thread);
+                if (location.pathname == `/thread/${thread.id}`) {
+                  navigate("/");
+                }
                 await deleteThread(thread.id);
                 await loadThreads(true);
               }}

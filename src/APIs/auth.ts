@@ -15,3 +15,7 @@ interface IRegisterParams extends ILoginParams {
 export async function register(params: IRegisterParams) {
   return await httpClient.post("/auth/register", params).then((response) => response.data);
 }
+
+export async function rotate(token: string) {
+  return httpClient.post<IAuthResponse>("/auth/rotate", { token }).then((response) => response.data);
+}

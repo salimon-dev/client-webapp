@@ -6,6 +6,7 @@ import { IAuthResponse } from "@specs/auth";
 import { setupHttpClient } from "./http";
 import { apiBaseUrlAtom, loadConfigs } from "./configs";
 import { loadThreads } from "./local";
+import { rotate } from "@apis/auth";
 
 export const bootstrapStateAtom = atom<"init" | "loading" | "done">("init");
 export const accessTokenAtom = atom<string>();
@@ -56,6 +57,16 @@ export async function validateAuthResponse(data: IAuthResponse): Promise<boolean
   }
 }
 
+export async function rotateToken(data: IAuthResponse): Promise<IAuthResponse | undefined> {
+  try {
+    const response = await rotate(data.refresh_token);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
+}
+
 /**
  * loads auth tokens from local storage and validates them against the server.
  */
@@ -63,16 +74,20 @@ export async function loadAndValidateAuth() {
   store.set(bootstrapStateAtom, "loading");
   await loadConfigs();
   setupHttpClient();
-  const authData = loadAuthFromLocalStorage();
+  let authData = loadAuthFromLocalStorage();
   if (!authData) {
     store.set(bootstrapStateAtom, "done");
     return;
   }
   const result = await validateAuthResponse(authData);
   if (!result) {
-    clearAuth();
-    store.set(bootstrapStateAtom, "done");
-    return;
+    // rotate token when current access token is invalid.
+    authData = await rotateToken(authData);
+    if (!authData) {
+      clearAuth();
+      store.set(bootstrapStateAtom, "done");
+      return;
+    }
   }
   storeAuthResponse(authData);
   setupHttpClient();
