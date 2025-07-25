@@ -39,15 +39,23 @@ export default function TextInput({
         placeholder={placeholder}
         onBlur={onBlur}
         onChange={onChange}
-        style={{ paddingTop: 2 }}
+        style={{ paddingTop: 2, height: 32 }}
         onKeyUp={(event) => {
           if (event.code === "Enter" && onSubmit) {
             onSubmit();
           }
         }}
       >
-        {leftSlot && <TextField.Slot side="left">{leftSlot}</TextField.Slot>}
-        {rightSlot && <TextField.Slot side="right">{rightSlot}</TextField.Slot>}
+        {leftSlot && (
+          <TextField.Slot style={{ marginTop: 0 }} side="left">
+            {leftSlot}
+          </TextField.Slot>
+        )}
+        {rightSlot && (
+          <TextField.Slot style={{ marginTop: 0 }} side="right">
+            {rightSlot}
+          </TextField.Slot>
+        )}
       </TextField.Root>
       {error && (
         <Text size="1" color="red">
