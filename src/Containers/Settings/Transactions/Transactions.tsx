@@ -1,21 +1,41 @@
 import Record from "./Record";
-import { useQuery } from "@tanstack/react-query";
+import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { searchTransactions } from "@apis/transactions";
-import { Heading } from "@radix-ui/themes";
+import { Button, Heading } from "@radix-ui/themes";
 import SendTransactionModal from "./SendTransactionModal";
 import LoadingView from "./Components/LoadingView/LoadingView";
+import { ITransaction } from "@specs/transactions";
+import { ICollection } from "@apis/common";
 
+const page_size = 2;
 export default function Transactions() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
+    ICollection<ITransaction>,
+    Error,
+    InfiniteData<ICollection<ITransaction>>,
+    [string],
+    number
+  >({
     queryKey: ["transactions"],
-    queryFn: () => {
-      return searchTransactions({ page: 1, page_size: 10 });
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const offset = lastPageParam * page_size;
+      if (lastPage.total > offset) {
+        return lastPageParam + 1;
+      } else {
+        return;
+      }
+    },
+    queryFn: ({ pageParam }): Promise<ICollection<ITransaction>> => {
+      return searchTransactions({ page: pageParam, page_size });
     },
   });
 
   function records() {
     if (isLoading || !data) return [];
-    return data.data;
+    return data.pages.reduce<ITransaction[]>((prev, curr) => {
+      return [...prev, ...curr.data];
+    }, []);
   }
 
   return (
@@ -41,6 +61,13 @@ export default function Transactions() {
           <Record key={item.id} record={item} />
         ))}
         {isLoading && <LoadingView message="loading transactions" />}
+        {hasNextPage && (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: 60 }}>
+            <Button onClick={() => fetchNextPage()} variant="ghost" loading={isFetchingNextPage}>
+              Load more
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
