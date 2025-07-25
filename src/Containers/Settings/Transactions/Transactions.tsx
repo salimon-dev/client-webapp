@@ -7,7 +7,7 @@ import LoadingView from "./Components/LoadingView/LoadingView";
 import { ITransaction } from "@specs/transactions";
 import { ICollection } from "@apis/common";
 
-const page_size = 2;
+const page_size = 10;
 export default function Transactions() {
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery<
     ICollection<ITransaction>,

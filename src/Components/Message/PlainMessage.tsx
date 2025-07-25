@@ -3,6 +3,7 @@ import Styles from "./styles.module.css";
 import { ILocalMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 import { tsToDateString } from "@helpers/time";
 import Avatar from "./Avatar";
+import ReactMarkdown from "react-markdown";
 import LoadingIcon from "@icons/LoadingIcon";
 
 interface Props {
@@ -20,7 +21,9 @@ export default function PlainMessage({ message }: Props) {
           </Box>
           <MessageDate message={message} />
         </Flex>
-        <Text size="2">{message.body}</Text>
+        <Text size="2">
+          <ReactMarkdown>{message.body}</ReactMarkdown>
+        </Text>
       </Flex>
     </Box>
   );
