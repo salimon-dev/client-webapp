@@ -1,0 +1,21 @@
+.profileDetail {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+.profileDetailColumn {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding-top: 10px;
+  box-sizing: border-box;
+}
+.userLogo {
+  flex: 1;
+  max-width: 120px;
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
