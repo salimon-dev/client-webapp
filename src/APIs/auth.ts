@@ -1,5 +1,6 @@
 import { httpClient } from "@providers/http";
 import { IAuthResponse } from "@specs/auth";
+import { IProfile } from "@specs/users";
 
 interface ILoginParams {
   username: string;
@@ -18,4 +19,12 @@ export async function register(params: IRegisterParams) {
 
 export async function rotate(token: string) {
   return httpClient.post<IAuthResponse>("/auth/rotate", { token }).then((response) => response.data);
+}
+
+interface IProfileResponse {
+  user: IProfile;
+  // TODO: permission schema is in this object too. can be useful in future
+}
+export async function getProfile() {
+  return httpClient.get<IProfileResponse>("/auth/profile").then((response) => response.data);
 }

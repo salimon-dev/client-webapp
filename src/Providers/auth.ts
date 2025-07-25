@@ -6,7 +6,7 @@ import { IAuthResponse } from "@specs/auth";
 import { setupHttpClient } from "./http";
 import { apiBaseUrlAtom, loadConfigs } from "./configs";
 import { loadThreads } from "./local";
-import { rotate } from "@apis/auth";
+import { getProfile, rotate } from "@apis/auth";
 
 export const bootstrapStateAtom = atom<"init" | "loading" | "done">("init");
 export const accessTokenAtom = atom<string>();
@@ -103,4 +103,10 @@ export function clearAuth() {
 
 export function useProfile() {
   return store.get(profileAtom);
+}
+
+export async function updateProfile() {
+  const response = await getProfile();
+  localStorage.setItem("profile", JSON.stringify(response.user));
+  store.set(profileAtom, response.user);
 }

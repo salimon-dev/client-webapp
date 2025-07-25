@@ -1,5 +1,5 @@
 import { Flex } from "@radix-ui/themes";
-import MainHeader from "../../Components/MainHeader/MainHeader";
+import MainHeader from "../../Components/ThreadHeader/ThreadHeader";
 import SendBox from "@components/SendBox/SendBox";
 import MessageList from "@components/Content/MessageList";
 import { useParams } from "react-router-dom";

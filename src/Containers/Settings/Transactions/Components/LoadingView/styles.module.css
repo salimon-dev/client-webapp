@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
+.icon {
+  margin-bottom: 0px;
+}
+
+.icon > svg {
+  width: 42px;
+  height: 42px;
+}
+
+.message {
+  margin-top: 0px;
+}
