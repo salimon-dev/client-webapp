@@ -4,7 +4,7 @@ export interface TextInputProps {
   label?: string;
   value?: string;
   name?: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "number";
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   onSubmit?: () => void;
