@@ -1,5 +1,5 @@
 import { Flex } from "@radix-ui/themes";
-import MainHeader from "../../Components/MainHeader/MainHeader";
+import MainHeader from "../../Components/ThreadHeader/ThreadHeader";
 import SendBox from "@components/SendBox/SendBox";
 import SelectUserForm from "@components/SelectUserForm/SelectUserForm";
 import { useEffect, useState } from "react";
