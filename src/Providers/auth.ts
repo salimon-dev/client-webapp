@@ -41,19 +41,18 @@ export function loadAuthFromLocalStorage(): IAuthResponse | undefined {
   }
 }
 
-export async function validateAuthResponse(data: IAuthResponse): Promise<boolean> {
+export async function validateAuthResponse(data: IAuthResponse): Promise<IProfile | undefined> {
   try {
     const baseURL = store.get(apiBaseUrlAtom);
-    await axios
+    return await axios
       .get("/auth/profile", {
         headers: { Authorization: "Bearer " + data.access_token },
         baseURL,
       })
       .then((response) => response.data);
-    return true;
   } catch (e) {
     console.log(e);
-    return false;
+    return undefined;
   }
 }
 
@@ -74,25 +73,22 @@ export async function loadAndValidateAuth() {
   store.set(bootstrapStateAtom, "loading");
   await loadConfigs();
   setupHttpClient();
-  let authData = loadAuthFromLocalStorage();
-  if (!authData) {
+  const storedAuthData = loadAuthFromLocalStorage();
+  if (!storedAuthData) {
     store.set(bootstrapStateAtom, "done");
     return;
   }
-  const result = await validateAuthResponse(authData);
-  if (!result) {
-    // rotate token when current access token is invalid.
-    authData = await rotateToken(authData);
-    if (!authData) {
-      clearAuth();
-      store.set(bootstrapStateAtom, "done");
-      return;
-    }
+  const freshAuthData = await rotateToken(storedAuthData);
+  if (!freshAuthData) {
+    clearAuth();
+    store.set(bootstrapStateAtom, "done");
+    return;
+  } else {
+    storeAuthResponse(freshAuthData);
+    setupHttpClient();
+    loadThreads();
+    store.set(bootstrapStateAtom, "done");
   }
-  storeAuthResponse(authData);
-  setupHttpClient();
-  loadThreads();
-  store.set(bootstrapStateAtom, "done");
 }
 
 export function clearAuth() {

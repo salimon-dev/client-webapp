@@ -26,6 +26,9 @@ export function amountToString(amount: number) {
     return `${(amount / 1000000000000).toFixed(2)}T`;
   }
 }
+export function formatWithCommas(amount: number) {
+  return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 export function transactionStatusToString(status: number) {
   switch (status) {
