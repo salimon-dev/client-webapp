@@ -2,14 +2,15 @@ import { Flex } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
 import { useAtomValue } from "jotai";
 import { sendBoxHeightAtom } from "@providers/layout";
-import { IMessage } from "@specs/threads";
+import { ILocalMessage } from "@specs/threads";
 import Message from "@components/Message/Message";
 
 interface IProps {
-  messages: IMessage[];
+  messages: ILocalMessage[];
 }
 export default function MessageList({ messages }: IProps) {
   const sendBoxHeight = useAtomValue(sendBoxHeightAtom);
+
   return (
     <Flex
       direction="column-reverse"
@@ -20,6 +21,11 @@ export default function MessageList({ messages }: IProps) {
       {messages.map((item) => (
         <Message message={item} key={item.id} />
       ))}
+      <div className={Styles.loadMore}>
+        <div className={Styles.splitter} />
+        <div>load older messages</div>
+        <div className={Styles.splitter} />
+      </div>
     </Flex>
   );
 }

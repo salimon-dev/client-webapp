@@ -28,3 +28,7 @@ export interface IMessage {
 export interface ILocalMessage extends IMessage {
   sendStatus: "pending" | "failed" | "done";
 }
+
+export interface ILocalThread extends IThread {
+  fetchedUntil: number | undefined;
+}

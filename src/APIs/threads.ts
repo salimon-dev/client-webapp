@@ -33,6 +33,7 @@ export async function deleteThread(threadId: string) {
 
 interface ISearchMessageParams extends ISearchParams {
   thread_id: string;
+  before?: number;
 }
 export async function searchMessages(params: ISearchMessageParams): Promise<ICollection<ILocalMessage>> {
   return httpClient

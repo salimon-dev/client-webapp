@@ -4,3 +4,23 @@
   overflow: auto;
   flex: 1;
 }
+
+.loadMore {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  gap: 12px;
+  color: var(--gray-10);
+  transition: all ease-in-out 150ms;
+}
+
+.loadMore:hover {
+  color: var(--gray-12);
+}
+
+.loadMore > .splitter {
+  flex: 1;
+  border-bottom: 1px solid var(--gray-7);
+}
