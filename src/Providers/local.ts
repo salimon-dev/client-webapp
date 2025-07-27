@@ -1,6 +1,6 @@
 import { searchMessages, searchThreads } from "@apis/threads";
 import { ILocalMessage, ILocalThread, IMessage, IThread } from "@specs/threads";
-import { atom, useAtomValue } from "jotai";
+import { atom } from "jotai";
 import { store } from "./store";
 
 const MESSAGE_PAGE_SIZE = 10;
@@ -13,6 +13,7 @@ export const loadingThreadsAtom = atom<boolean>(false);
 
 export const messagesAtom = atom<ILocalMessage[]>([]);
 export const loadingMessagesAtom = atom<string[]>([]);
+export const loadingMoreMessagesAtom = atom<string[]>([]);
 
 export function getActiveThread() {
   const id = store.get(activeThreadIdAtom);
@@ -41,17 +42,32 @@ function setLoadingMessages(threadId: string, value: boolean) {
     store.set(loadingMessagesAtom, loadings);
   }
 }
+function setLoadingMoreMessages(threadId: string, value: boolean) {
+  const loadings = store.get(loadingMoreMessagesAtom).filter((id) => id !== threadId);
+  if (value) {
+    store.set(loadingMoreMessagesAtom, [...loadings, threadId]);
+  } else {
+    store.set(loadingMoreMessagesAtom, loadings);
+  }
+}
 export async function loadMessages(threadId: string, before?: number) {
   const messages = store.get(messagesAtom);
   try {
-    setLoadingMessages(threadId, true);
+    if (before) {
+      setLoadingMoreMessages(threadId, true);
+    } else {
+      setLoadingMessages(threadId, true);
+    }
     const response = await searchMessages({ before, page_size: MESSAGE_PAGE_SIZE, thread_id: threadId });
-    console.log(response);
     const result = [...messages, ...response.data];
     store.set(messagesAtom, result);
     updateThreadOldestMessageIndex(threadId);
   } finally {
-    setLoadingMessages(threadId, false);
+    if (before) {
+      setLoadingMoreMessages(threadId, false);
+    } else {
+      setLoadingMessages(threadId, false);
+    }
   }
 }
 
@@ -110,16 +126,9 @@ export async function deleteLocalThread(thread: IThread) {
 
 export async function loadOlderMessagesFromThread(threadId: string) {
   const localThread = store.get(threadsAtom).find((item) => item.id === threadId);
-  console.log(localThread);
   if (!localThread) {
     console.debug("thread not found");
     return;
   }
   await loadMessages(threadId, localThread.fetchedUntil);
-}
-
-export function useActiveThread() {
-  const activeThreadId = useAtomValue(activeThreadIdAtom);
-  const threads = useAtomValue(threadsAtom);
-  return threads.find((item) => item.id === activeThreadId);
 }

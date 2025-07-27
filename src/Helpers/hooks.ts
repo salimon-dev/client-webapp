@@ -1,5 +1,7 @@
 import {
+  activeThreadIdAtom,
   loadingMessagesAtom,
+  loadingMoreMessagesAtom,
   loadingThreadsAtom,
   messagesAtom,
   threadsAtom,
@@ -30,4 +32,15 @@ export function useLoadingThreads() {
 export function useLoadingLastMessages(threadId: string) {
   const loadings = useAtomValue(loadingMessagesAtom);
   return loadings.includes(threadId);
+}
+
+export function useLoadingMoreMessages(threadId: string) {
+  const loadings = useAtomValue(loadingMoreMessagesAtom);
+  return loadings.includes(threadId);
+}
+
+export function useActiveThread() {
+  const activeThreadId = useAtomValue(activeThreadIdAtom);
+  const threads = useAtomValue(threadsAtom);
+  return threads.find((item) => item.id === activeThreadId);
 }

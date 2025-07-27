@@ -4,15 +4,9 @@ import SendBox from "@components/SendBox/SendBox";
 import MessageList from "@components/Content/MessageList";
 import { useParams } from "react-router-dom";
 import { sendMessage } from "@apis/threads";
-import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
+import { useActiveThread, useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
 import { useEffect } from "react";
-import {
-  activeThreadIdAtom,
-  appendLocalMessage,
-  appendRemoteMessage,
-  loadMessages,
-  useActiveThread,
-} from "@providers/local";
+import { activeThreadIdAtom, appendLocalMessage, appendRemoteMessage, loadMessages } from "@providers/local";
 import ThreadContentLoading from "@components/ThreadContentLoading/ThreadContentLoading";
 import { useSetAtom } from "jotai";
 import { MESSAGE_TYPE_PLAIN } from "@specs/threads";
