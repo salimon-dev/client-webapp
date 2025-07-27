@@ -6,7 +6,13 @@ import { useParams } from "react-router-dom";
 import { sendMessage } from "@apis/threads";
 import { useLoadingLastMessages, useThreadMessages } from "@helpers/hooks";
 import { useEffect } from "react";
-import { activeThreadIdAtom, appendLocalMessage, appendRemoteMessage, loadMessages } from "@providers/local";
+import {
+  activeThreadIdAtom,
+  appendLocalMessage,
+  appendRemoteMessage,
+  loadMessages,
+  useActiveThread,
+} from "@providers/local";
 import ThreadContentLoading from "@components/ThreadContentLoading/ThreadContentLoading";
 import { useSetAtom } from "jotai";
 import { MESSAGE_TYPE_PLAIN } from "@specs/threads";
@@ -17,12 +23,17 @@ export default function Thread() {
   const profile = useProfile();
   const isLoading = useLoadingLastMessages(threadId);
   const messages = useThreadMessages(threadId);
-  const setActiveThread = useSetAtom(activeThreadIdAtom);
+  const setActiveThreadId = useSetAtom(activeThreadIdAtom);
+  const activeThread = useActiveThread();
+  useEffect(() => {
+    setActiveThreadId(threadId);
+  }, [threadId, setActiveThreadId]);
 
   useEffect(() => {
-    setActiveThread(threadId);
-    loadMessages(threadId);
-  }, [threadId, setActiveThread]);
+    if (activeThread && activeThread.fetchedUntil === undefined) {
+      loadMessages(activeThread.id);
+    }
+  }, [activeThread]);
 
   async function submit(body: string) {
     try {
@@ -44,11 +55,16 @@ export default function Thread() {
       console.error(e);
     }
   }
+
+  function isLoadingThread() {
+    if (!activeThread) return true;
+    return isLoading;
+  }
   return (
     <Flex direction="column" style={{ flex: 1 }}>
       <MainHeader />
-      {!isLoading && <MessageList messages={messages} />}
-      {isLoading && <ThreadContentLoading message="loading messages ..." />}
+      {!isLoadingThread() && <MessageList messages={messages} />}
+      {isLoadingThread() && <ThreadContentLoading message="loading messages ..." />}
       <SendBox onSubmit={submit} />
     </Flex>
   );

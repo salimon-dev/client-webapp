@@ -1,16 +1,26 @@
 import { searchMessages, searchThreads } from "@apis/threads";
 import { ILocalMessage, ILocalThread, IMessage, IThread } from "@specs/threads";
-import { atom } from "jotai";
+import { atom, useAtomValue } from "jotai";
 import { store } from "./store";
 
 const MESSAGE_PAGE_SIZE = 10;
 
 export const threadsSearchQueryAtom = atom<string>("");
+
 export const activeThreadIdAtom = atom<string>();
 export const threadsAtom = atom<ILocalThread[]>([]);
-export const messagesAtom = atom<ILocalMessage[]>([]);
 export const loadingThreadsAtom = atom<boolean>(false);
+
+export const messagesAtom = atom<ILocalMessage[]>([]);
 export const loadingMessagesAtom = atom<string[]>([]);
+
+export function getActiveThread() {
+  const id = store.get(activeThreadIdAtom);
+  if (!id) {
+    return undefined;
+  }
+  return store.get(threadsAtom).find((item) => item.id === id);
+}
 
 export async function loadThreads(silent = false) {
   if (!silent) store.set(loadingThreadsAtom, true);
@@ -33,15 +43,31 @@ function setLoadingMessages(threadId: string, value: boolean) {
 }
 export async function loadMessages(threadId: string, before?: number) {
   const messages = store.get(messagesAtom);
-  const threadMessages = messages.filter((item) => item.thread_id === threadId);
-  if (threadMessages.length > 0) return;
   try {
     setLoadingMessages(threadId, true);
     const response = await searchMessages({ before, page_size: MESSAGE_PAGE_SIZE, thread_id: threadId });
+    console.log(response);
     const result = [...messages, ...response.data];
     store.set(messagesAtom, result);
+    updateThreadOldestMessageIndex(threadId);
   } finally {
     setLoadingMessages(threadId, false);
+  }
+}
+
+export async function updateThreadOldestMessageIndex(threadId: string) {
+  const thread = store.get(threadsAtom).find((item) => item.id === threadId);
+  const messages = store.get(messagesAtom).filter((item) => item.thread_id === threadId);
+  if (!thread) {
+    console.debug("thread not found");
+    return;
+  }
+
+  const oldestMessage = messages.reduce((prev, curr) => (prev.created_at < curr.created_at ? prev : curr));
+  if (!oldestMessage) {
+    putThread({ ...thread, fetchedUntil: undefined });
+  } else {
+    putThread({ ...thread, fetchedUntil: oldestMessage.created_at });
   }
 }
 
@@ -84,24 +110,16 @@ export async function deleteLocalThread(thread: IThread) {
 
 export async function loadOlderMessagesFromThread(threadId: string) {
   const localThread = store.get(threadsAtom).find((item) => item.id === threadId);
+  console.log(localThread);
   if (!localThread) {
     console.debug("thread not found");
     return;
   }
   await loadMessages(threadId, localThread.fetchedUntil);
-  const oldestMessage = store
-    .get(messagesAtom)
-    .filter((item) => item.thread_id === threadId)
-    .reduce((prev, curr) => {
-      if (prev.created_at < curr.created_at) {
-        return prev;
-      } else {
-        return curr;
-      }
-    });
-  if (!oldestMessage) {
-    console.log("no older messages");
-    return;
-  }
-  putThread({ ...localThread, fetchedUntil: oldestMessage.created_at });
+}
+
+export function useActiveThread() {
+  const activeThreadId = useAtomValue(activeThreadIdAtom);
+  const threads = useAtomValue(threadsAtom);
+  return threads.find((item) => item.id === activeThreadId);
 }
