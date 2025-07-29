@@ -8,9 +8,23 @@ import { appendRemoteMessage, deleteLocalThread, putThread } from "./local";
 
 export let wsConnection: WebSocket | undefined = undefined;
 export const wsEvents = new Subject<WebSocketEvent>();
-export const wsStateAtom = atom<"init" | "connected" | "disconnected" | "authenticated">("init");
+export const wsStateAtom = atom<"init" | "connected" | "disconnected" | "authenticated" | "guest">("init");
 
 export async function setupWebsocketConnection() {
+  wsEvents.subscribe((event) => {
+    switch (event.action) {
+      case "AUTH":
+        return handleAuthEvent(event);
+      case "MESSAGE":
+        return handleMessageEvent(event);
+      case "THREAD":
+        return handleThreadEvent(event);
+    }
+  });
+  connectToWebsocket();
+}
+
+async function connectToWebsocket() {
   const url = store.get(wsBaseUrlAtom);
   if (!url) return;
   if (wsConnection) {
@@ -32,16 +46,6 @@ export async function setupWebsocketConnection() {
       const data = JSON.parse(payload.data) as WebSocketEvent;
       wsEvents.next(data);
     };
-    wsEvents.subscribe((event) => {
-      switch (event.action) {
-        case "AUTH":
-          return handleAuthEvent(event);
-        case "MESSAGE":
-          return handleMessageEvent(event);
-        case "THREAD":
-          return handleThreadEvent(event);
-      }
-    });
   });
 }
 
@@ -56,7 +60,7 @@ function handleAuthEvent(event: AuthEvent): void {
   if (event.result) {
     store.set(wsStateAtom, "authenticated");
   } else {
-    store.set(wsStateAtom, "connected");
+    store.set(wsStateAtom, "guest");
   }
 }
 
@@ -80,3 +84,13 @@ function handleThreadEvent(event: ThreadEvent): void {
       deleteLocalThread(event.thread);
   }
 }
+
+store.sub(wsStateAtom, () => {
+  const state = store.get(wsStateAtom);
+  switch (state) {
+    case "connected":
+      return setupWebsocketAuthentication();
+    case "disconnected":
+      return connectToWebsocket();
+  }
+});

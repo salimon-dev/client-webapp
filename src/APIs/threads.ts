@@ -5,6 +5,7 @@ import { ICollection, ISearchParams } from "./common";
 interface IStartThreadParams {
   target_id: string;
   message: string;
+  name?: string;
 }
 
 interface IStartThreadResponse {

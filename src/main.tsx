@@ -8,14 +8,13 @@ import { store } from "@providers/store";
 import { BrowserRouter } from "react-router-dom";
 import { loadAndValidateAuth } from "@providers/auth.ts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { setupWebsocketAuthentication, setupWebsocketConnection } from "@providers/websocket.ts";
+import { setupWebsocketConnection } from "@providers/websocket.ts";
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
 async function bootstrap() {
   await loadAndValidateAuth();
   await setupWebsocketConnection();
-  await setupWebsocketAuthentication();
 }
 bootstrap();
 
