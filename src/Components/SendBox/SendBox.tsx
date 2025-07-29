@@ -45,7 +45,10 @@ export default function SendBox({ onSubmit, disabled }: IProps) {
           updateSendBoxHeight(h + 16);
         }}
         onKeyDown={(event) => {
-          if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) send();
+          if (event.key === "Enter" && (event.metaKey || event.ctrlKey || !body.includes("\n"))) {
+            send();
+            event.preventDefault();
+          }
         }}
         onPaste={(event) => {
           console.log(event);
