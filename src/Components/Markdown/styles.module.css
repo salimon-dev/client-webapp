@@ -1,0 +1,46 @@
+.codeContainer {
+  background: var(--gray-3);
+  border-radius: 6px;
+  padding: 12px 12px 12px 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  height: 32px;
+}
+
+.language {
+  font-style: italic;
+  color: var(--gray-11);
+  margin-top: -4px;
+}
+
+.copyButton {
+  border: 1px solid var(--gray-8);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all ease-in-out 225ms;
+}
+
+.isCopied {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.copyButton:not(.isCopied):hover {
+  background: var(--gray-8);
+  border-color: var(--gray-8);
+}
+
+.copyButton > svg {
+  width: 16px;
+  height: 16px;
+}

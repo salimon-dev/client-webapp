@@ -3,8 +3,8 @@ import Styles from "./styles.module.css";
 import { ILocalMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
 import { tsToDateString } from "@helpers/time";
 import Avatar from "./Avatar";
-import ReactMarkdown from "react-markdown";
 import LoadingIcon from "@icons/LoadingIcon";
+import Markdown from "@components/Markdown/Markdown";
 
 interface Props {
   message: ILocalMessage;
@@ -22,7 +22,7 @@ export default function PlainMessage({ message }: Props) {
           <MessageDate message={message} />
         </Flex>
         <Text size="2">
-          <ReactMarkdown>{message.body}</ReactMarkdown>
+          <Markdown content={message.body} />
         </Text>
       </Flex>
     </Box>

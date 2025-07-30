@@ -8,6 +8,7 @@ import UserIcon from "@icons/UserIcon";
 import { deleteThread } from "@apis/threads";
 import { activeThreadIdAtom, deleteLocalThread, loadThreads } from "@providers/local";
 import { useAtomValue } from "jotai";
+import { getThreadName } from "@helpers/transformers";
 
 interface IProps {
   thread: IThread;
@@ -29,7 +30,7 @@ export default function ThreadItem({ thread }: IProps) {
       <div className={Styles.icon}>
         <UserIcon />
       </div>
-      <div className={Styles.title}>{thread.name}</div>
+      <div className={Styles.title}>{getThreadName(thread)}</div>
       <div
         className={Styles.actions}
         onClick={(e) => {

@@ -1,3 +1,7 @@
+import { profileAtom } from "@providers/auth";
+import { store } from "@providers/store";
+import { IThread } from "@specs/threads";
+
 export function userStatusToString(status: number) {
   switch (status) {
     case 1:
@@ -41,4 +45,20 @@ export function transactionStatusToString(status: number) {
     default:
       return "N.D";
   }
+}
+
+export function getThreadName(thread: IThread): string {
+  if (thread.name !== "{NAME}") {
+    return thread.name;
+  }
+  const profile = store.get(profileAtom);
+
+  const usernames = thread.members
+    .filter((item) => {
+      if (!profile) return true;
+      return item.id != profile.id;
+    })
+    .map((item) => item.username)
+    .join(", ");
+  return usernames;
 }

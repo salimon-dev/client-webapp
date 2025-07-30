@@ -30,7 +30,7 @@ export default function BlankChat() {
   }
   useEffect(() => {
     setActiveThread(undefined);
-  }, []);
+  }, [setActiveThread]);
   return (
     <Flex direction="column" style={{ flex: 1 }}>
       <MainHeader />

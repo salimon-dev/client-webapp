@@ -1,8 +1,11 @@
+import { IUser } from "./users";
+
 export interface IThread {
   id: string;
   created_at: number;
   updated_at: number;
   name: string;
+  members: IUser[];
 }
 
 export interface IThreadMember {
@@ -31,4 +34,5 @@ export interface ILocalMessage extends IMessage {
 
 export interface ILocalThread extends IThread {
   fetchedUntil: number | undefined;
+  hasOlderMessages: boolean;
 }
