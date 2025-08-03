@@ -1,7 +1,7 @@
 import { Button, DropdownMenu, Flex, Text } from "@radix-ui/themes";
 import Styles from "./styles.module.css";
 import MenuIcon from "@icons/MenuIcon";
-import { IThread } from "@specs/threads";
+import { IThread, THREAD_CATEGORY_CHAT, THREAD_CATEGORY_PAYMENTS } from "@specs/threads";
 import { useLocation, useNavigate } from "react-router-dom";
 import DeleteIcon from "@icons/DeleteIcon";
 import UserIcon from "@icons/UserIcon";
@@ -9,11 +9,13 @@ import { deleteThread } from "@apis/threads";
 import { activeThreadIdAtom, deleteLocalThread, loadThreads } from "@providers/local";
 import { useAtomValue } from "jotai";
 import { getThreadName } from "@helpers/transformers";
+import ChatIcon from "@icons/ChatIcon";
+import PaymentIcon from "@icons/PaymentIcon";
 
-interface IProps {
+interface Props {
   thread: IThread;
 }
-export default function ThreadItem({ thread }: IProps) {
+export default function ThreadItem({ thread }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
   const activeThreadId = useAtomValue(activeThreadIdAtom);
@@ -28,7 +30,7 @@ export default function ThreadItem({ thread }: IProps) {
   return (
     <Flex direction="row" className={containerClasses()} onClick={() => navigate(`/thread/${thread.id}`)}>
       <div className={Styles.icon}>
-        <UserIcon />
+        <ThreadIcon thread={thread} />
       </div>
       <div className={Styles.title}>{getThreadName(thread)}</div>
       <div
@@ -64,4 +66,15 @@ export default function ThreadItem({ thread }: IProps) {
       </div>
     </Flex>
   );
+}
+
+function ThreadIcon({ thread }: Props) {
+  switch (thread.category) {
+    case THREAD_CATEGORY_CHAT:
+      return <ChatIcon />;
+    case THREAD_CATEGORY_PAYMENTS:
+      return <PaymentIcon />;
+    default:
+      return <UserIcon />;
+  }
 }

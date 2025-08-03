@@ -4,6 +4,7 @@ export interface IThread {
   id: string;
   created_at: number;
   updated_at: number;
+  category: number;
   name: string;
   members: IUser[];
 }
@@ -36,3 +37,6 @@ export interface ILocalThread extends IThread {
   fetchedUntil: number | undefined;
   hasOlderMessages: boolean;
 }
+
+export const THREAD_CATEGORY_CHAT = 1;
+export const THREAD_CATEGORY_PAYMENTS = 2;

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { activeThreadIdAtom, loadThreads } from "@providers/local";
 import ThreadContentLoading from "@components/ThreadContentLoading/ThreadContentLoading";
 import { useSetAtom } from "jotai";
+import { THREAD_CATEGORY_CHAT } from "@specs/threads";
 
 export default function BlankChat() {
   const [selectedUser, setSelectedUser] = useState<IUser>();
@@ -19,7 +20,11 @@ export default function BlankChat() {
     if (!selectedUser) return;
     try {
       setSubmitting(true);
-      const response = await startThread({ target_id: selectedUser.id, message: body });
+      const response = await startThread({
+        target_id: selectedUser.id,
+        message: body,
+        category: THREAD_CATEGORY_CHAT,
+      });
       navigate(`/thread/${response.thread.id}`);
       loadThreads(true);
     } catch (e) {

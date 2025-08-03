@@ -1,6 +1,6 @@
 import { profileAtom } from "@providers/auth";
 import { store } from "@providers/store";
-import { IThread } from "@specs/threads";
+import { IThread, THREAD_CATEGORY_CHAT, THREAD_CATEGORY_PAYMENTS } from "@specs/threads";
 
 export function userStatusToString(status: number) {
   switch (status) {
@@ -51,6 +51,17 @@ export function getThreadName(thread: IThread): string {
   if (thread.name !== "{NAME}") {
     return thread.name;
   }
+  switch (thread.category) {
+    case THREAD_CATEGORY_CHAT:
+      return getChatThreadName(thread);
+    case THREAD_CATEGORY_PAYMENTS:
+      return "payments";
+    default:
+      return "NONE";
+  }
+}
+
+function getChatThreadName(thread: IThread): string {
   const profile = store.get(profileAtom);
 
   const usernames = thread.members

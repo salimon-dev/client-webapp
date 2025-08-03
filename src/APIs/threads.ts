@@ -6,6 +6,7 @@ interface IStartThreadParams {
   target_id: string;
   message: string;
   name?: string;
+  category?: number;
 }
 
 interface IStartThreadResponse {
