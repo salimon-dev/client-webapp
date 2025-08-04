@@ -43,7 +43,7 @@ export default function Thread() {
         username: profile!.username,
         sendStatus: "pending",
       });
-      const response = await sendMessage({ body, thread_id: threadId });
+      const response = await sendMessage({ body, thread_id: threadId, type: MESSAGE_TYPE_PLAIN });
       appendRemoteMessage(response, localMessageId);
     } catch (e) {
       console.error(e);

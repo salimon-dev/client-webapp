@@ -12,8 +12,17 @@ export const threadsAtom = atom<ILocalThread[]>([]);
 export const loadingThreadsAtom = atom<boolean>(false);
 
 export const messagesAtom = atom<ILocalMessage[]>([]);
-export const loadingMessagesAtom = atom<string[]>([]);
-export const loadingMoreMessagesAtom = atom<string[]>([]);
+export const activeJobsAtom = atom<string[]>([]);
+
+function hasActiveJob(jobId: string) {
+  return store.get(activeJobsAtom).includes(jobId);
+}
+function pushActiveJob(jobId: string) {
+  store.set(activeJobsAtom, (state) => [...state, jobId]);
+}
+function removeActiveJob(jobId: string) {
+  store.set(activeJobsAtom, (state) => state.filter((job) => job !== jobId));
+}
 
 export function getActiveThread() {
   const id = store.get(activeThreadIdAtom);
@@ -27,47 +36,48 @@ export async function loadThreads(silent = false) {
   if (!silent) store.set(loadingThreadsAtom, true);
   const name = store.get(threadsSearchQueryAtom);
   const response = await searchThreads({ page: 1, page_size: 10, name });
+  // TODO: make has older messages flag functional
   store.set(
     threadsAtom,
-    response.data.map((item) => ({ ...item, fetchedUntil: undefined }))
+    response.data.map((item) => ({ ...item, fetchedUntil: undefined, hasOlderMessages: true }))
   );
   if (!silent) store.set(loadingThreadsAtom, false);
 }
 
-function setLoadingMessages(threadId: string, value: boolean) {
-  const loadings = store.get(loadingMessagesAtom).filter((id) => id !== threadId);
-  if (value) {
-    store.set(loadingMessagesAtom, [...loadings, threadId]);
-  } else {
-    store.set(loadingMessagesAtom, loadings);
+export async function loadMessages(threadId: string, mode: "init" | "load_more" = "init") {
+  // check if there is any active job regarding this thread loading messages
+  if (hasActiveJob(`message:init:${threadId}`)) return;
+  if (hasActiveJob(`message:load_more:${threadId}`)) return;
+
+  const thread = store.get(threadsAtom).find((item) => item.id === threadId);
+  if (!thread) {
+    console.debug("thread not found");
+    return;
   }
-}
-function setLoadingMoreMessages(threadId: string, value: boolean) {
-  const loadings = store.get(loadingMoreMessagesAtom).filter((id) => id !== threadId);
-  if (value) {
-    store.set(loadingMoreMessagesAtom, [...loadings, threadId]);
-  } else {
-    store.set(loadingMoreMessagesAtom, loadings);
-  }
-}
-export async function loadMessages(threadId: string, before?: number) {
-  const messages = store.get(messagesAtom);
-  try {
-    if (before) {
-      setLoadingMoreMessages(threadId, true);
-    } else {
-      setLoadingMessages(threadId, true);
+  // if it's init mode, then client must not have any messages in the list yet.
+  if (mode === "init") {
+    if (store.get(messagesAtom).some((item) => item.thread_id === threadId)) {
+      return;
     }
-    const response = await searchMessages({ before, page_size: MESSAGE_PAGE_SIZE, thread_id: threadId });
-    const result = [...messages, ...response.data];
+  }
+
+  const jobKey = `message:${mode}:${threadId}`;
+  pushActiveJob(jobKey);
+  try {
+    const messages = store.get(messagesAtom);
+    const response = await searchMessages({
+      before: mode === "init" ? undefined : thread.fetchedUntil,
+      page_size: MESSAGE_PAGE_SIZE,
+      thread_id: threadId,
+    });
+    const newMessages = response.data.filter((item) => !messages.find((m) => m.id == item.id));
+    const result = [...messages, ...newMessages];
     store.set(messagesAtom, result);
     updateThreadOldestMessageIndex(threadId);
+  } catch (e) {
+    console.log(e);
   } finally {
-    if (before) {
-      setLoadingMoreMessages(threadId, false);
-    } else {
-      setLoadingMessages(threadId, false);
-    }
+    removeActiveJob(jobKey);
   }
 }
 
@@ -130,5 +140,5 @@ export async function loadOlderMessagesFromThread(threadId: string) {
     console.debug("thread not found");
     return;
   }
-  await loadMessages(threadId, localThread.fetchedUntil);
+  await loadMessages(threadId, "load_more");
 }

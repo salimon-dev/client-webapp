@@ -78,7 +78,7 @@ function handleThreadEvent(event: ThreadEvent): void {
   switch (event.type) {
     case "CREATE":
     case "UPDATE":
-      putThread({ ...event.thread, fetchedUntil: undefined });
+      putThread({ ...event.thread, fetchedUntil: undefined, hasOlderMessages: true });
       break;
     case "DELETE":
       deleteLocalThread(event.thread);

@@ -1,6 +1,6 @@
 import { profileAtom } from "@providers/auth";
 import { store } from "@providers/store";
-import { IThread, THREAD_CATEGORY_CHAT, THREAD_CATEGORY_PAYMENTS } from "@specs/threads";
+import { IThread } from "@specs/threads";
 
 export function userStatusToString(status: number) {
   switch (status) {
@@ -51,25 +51,16 @@ export function getThreadName(thread: IThread): string {
   if (thread.name !== "{NAME}") {
     return thread.name;
   }
-  switch (thread.category) {
-    case THREAD_CATEGORY_CHAT:
-      return getChatThreadName(thread);
-    case THREAD_CATEGORY_PAYMENTS:
-      return "payments";
-    default:
-      return "NONE";
-  }
+  return getChatThreadName(thread);
 }
 
+// right now each thread has only two members so we can just filter out the current user and display other name.
 function getChatThreadName(thread: IThread): string {
   const profile = store.get(profileAtom);
-
-  const usernames = thread.members
-    .filter((item) => {
-      if (!profile) return true;
-      return item.id != profile.id;
-    })
-    .map((item) => item.username)
-    .join(", ");
-  return usernames;
+  if (!profile) return thread.name;
+  const member = thread.members.find((item) => item.id !== profile!.id);
+  if (!member) {
+    return thread.name;
+  }
+  return member.username;
 }

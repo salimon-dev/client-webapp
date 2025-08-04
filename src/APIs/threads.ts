@@ -1,23 +1,15 @@
 import { httpClient } from "@providers/http";
-import { ILocalMessage, IMessage, IThread, IThreadMember } from "@specs/threads";
+import { ILocalMessage, IMessage, IThread } from "@specs/threads";
 import { ICollection, ISearchParams } from "./common";
 
 interface IStartThreadParams {
   target_id: string;
-  message: string;
   name?: string;
   category?: number;
 }
 
-interface IStartThreadResponse {
-  thread: IThread;
-  members: IThreadMember[];
-  messages: IMessage[];
-}
 export async function startThread(params: IStartThreadParams) {
-  return httpClient
-    .post<IStartThreadResponse>("/member/threads/start", params)
-    .then((response) => response.data);
+  return httpClient.post<IThread>("/member/threads/start", params).then((response) => response.data);
 }
 
 interface ISearchThreadsParams extends ISearchParams {
@@ -50,6 +42,7 @@ export async function searchMessages(params: ISearchMessageParams): Promise<ICol
 interface ISendMessageParams {
   thread_id: string;
   body: string;
+  type: number;
 }
 export async function sendMessage(params: ISendMessageParams) {
   return httpClient.post<IMessage>("/member/messages/send", params).then((response) => response.data);

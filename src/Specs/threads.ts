@@ -18,6 +18,7 @@ export interface IThreadMember {
 }
 
 export const MESSAGE_TYPE_PLAIN = 1;
+export const MESSAGE_TYPE_PAYMENT = 2;
 export interface IMessage {
   id: string;
   created_at: number;
