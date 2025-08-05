@@ -12,3 +12,7 @@ export interface ITransaction {
   description: string;
   category: string;
 }
+
+export const TRANSACTION_STATUS_PENDING = 1;
+export const TRANSACTION_STATUS_DONE = 2;
+export const TRANSACTION_STATUS_REJECTED = 3;

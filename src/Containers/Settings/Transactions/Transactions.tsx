@@ -1,4 +1,3 @@
-import Record from "./Record";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { searchTransactions } from "@apis/transactions";
 import { Button, Heading } from "@radix-ui/themes";
@@ -6,6 +5,7 @@ import SendTransactionModal from "./SendTransactionModal";
 import LoadingView from "./Components/LoadingView/LoadingView";
 import { ITransaction } from "@specs/transactions";
 import { ICollection } from "@apis/common";
+import TransactionCard from "@components/TransactionCard/TransactionCard";
 
 const page_size = 10;
 export default function Transactions() {
@@ -58,7 +58,7 @@ export default function Transactions() {
         style={{ padding: 12, boxSizing: "border-box", overflow: "auto", maxHeight: "calc(100vh - 234px)" }}
       >
         {records().map((item) => (
-          <Record key={item.id} record={item} />
+          <TransactionCard key={item.id} record={item} />
         ))}
         {isLoading && <LoadingView message="loading transactions" />}
         {hasNextPage && (

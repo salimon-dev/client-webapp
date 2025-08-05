@@ -1,19 +1,27 @@
-import { ITransaction } from "@specs/transactions";
+import { ITransaction, TRANSACTION_STATUS_PENDING } from "@specs/transactions";
 import Styles from "./styles.module.css";
 import { useAtomValue } from "jotai";
 import { profileAtom } from "@providers/auth";
 import { formatWithCommas, transactionStatusToString } from "@helpers/transformers";
-import { Text } from "@radix-ui/themes";
+import { Button, DropdownMenu, Text } from "@radix-ui/themes";
+import MenuIcon from "@icons/MenuIcon";
+import SuccessIcon from "@icons/SuccessIcon";
+import ErrorIcon from "@icons/ErrorIcon";
+import { useState } from "react";
+import LoadingIcon from "@icons/LoadingIcon";
+import { updateTransactionStatus } from "@apis/transactions";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   record: ITransaction;
 }
-export default function Record({ record }: Props) {
+export default function TransactionCard({ record }: Props) {
   const profile = useAtomValue(profileAtom);
   if (!profile) return;
   const type = record.source_id === profile!.id ? "out" : "in";
   return (
     <div className={Styles.container}>
+      {record.status === TRANSACTION_STATUS_PENDING && <ActionsMenu record={record} />}
       <div className={Styles.amountColumn}>
         <div className={Styles.recordType}>{type}</div>
         <div
@@ -84,4 +92,46 @@ function StatusBadge({ status }: { status: number }) {
         </Text>
       );
   }
+}
+
+function ActionsMenu({ record }: Props) {
+  const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState<"accept" | "reject" | undefined>();
+  async function changeStatus(value: "accept" | "reject") {
+    if (loading) return;
+    try {
+      setLoading(value);
+      await updateTransactionStatus(record.id, value);
+      queryClient.refetchQueries({ queryKey: ["transactions"] });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setOpen(false);
+      setLoading(undefined);
+    }
+  }
+  return (
+    <div className={Styles.actionsBtn}>
+      <DropdownMenu.Root open={open} onOpenChange={setOpen}>
+        <DropdownMenu.Trigger>
+          <Button variant="ghost" radius="full" style={{ width: 24, height: 24, padding: 0 }}>
+            <MenuIcon style={{ width: 16, height: 16 }} />
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <div className={Styles.actionsMenu}>
+            <div onClick={() => changeStatus("accept")}>
+              {loading === "accept" ? <LoadingIcon /> : <SuccessIcon />}
+              <label>Accept</label>
+            </div>
+            <div onClick={() => changeStatus("reject")}>
+              {loading === "reject" ? <LoadingIcon /> : <ErrorIcon />}
+              <label>Reject</label>
+            </div>
+          </div>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </div>
+  );
 }

@@ -1,3 +1,4 @@
+import { ITransaction } from "./transactions";
 import { IUser } from "./users";
 
 export interface IThread {
@@ -28,6 +29,7 @@ export interface IMessage {
   username: string;
   body: string;
   type: number;
+  transaction?: ITransaction;
 }
 
 export interface ILocalMessage extends IMessage {

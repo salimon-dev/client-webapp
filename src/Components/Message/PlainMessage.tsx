@@ -1,9 +1,5 @@
-import { Box, Flex, Text } from "@radix-ui/themes";
-import Styles from "./styles.module.css";
-import { ILocalMessage, MESSAGE_TYPE_PLAIN } from "@specs/threads";
-import { tsToDateString } from "@helpers/time";
-import Avatar from "./Avatar";
-import LoadingIcon from "@icons/LoadingIcon";
+import { Text } from "@radix-ui/themes";
+import { ILocalMessage } from "@specs/threads";
 import Markdown from "@components/Markdown/Markdown";
 
 interface Props {
@@ -11,35 +7,9 @@ interface Props {
 }
 
 export default function PlainMessage({ message }: Props) {
-  if (message.type !== MESSAGE_TYPE_PLAIN) return;
   return (
-    <Box className={Styles.messageBox}>
-      <Flex direction="column" gap="2">
-        <Flex direction="row" style={{ justifyContent: "space-between", alignItems: "center", height: 38 }}>
-          <Box>
-            <Avatar from={message.username} />
-          </Box>
-          <MessageDate message={message} />
-        </Flex>
-        <Text size="2">
-          <Markdown content={message.body} />
-        </Text>
-      </Flex>
-    </Box>
+    <Text size="2">
+      <Markdown content={message.body} />
+    </Text>
   );
-}
-
-function MessageDate({ message }: Props) {
-  switch (message.sendStatus) {
-    case "done":
-      return <Box className={Styles.messageDate}>{tsToDateString(message.updated_at)}</Box>;
-    case "pending":
-      return (
-        <Box className={Styles.messageDate}>
-          <LoadingIcon />
-        </Box>
-      );
-    case "failed":
-      return <Box className={Styles.messageDate}>failed</Box>;
-  }
 }

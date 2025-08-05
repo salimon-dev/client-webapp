@@ -5,7 +5,7 @@ interface Props {
 }
 export default function ErrorIcon({ style }: Props) {
   return (
-    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ ...style }}>
+    <svg viewBox="0 0 65 65" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ ...style }}>
       <circle cx="32" cy="32" r="30" style={{ stroke: "var(--color-danger)" }} strokeWidth="4" />
       <line
         x1="32"
