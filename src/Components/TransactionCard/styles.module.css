@@ -1,0 +1,87 @@
+.container {
+  min-height: 64px;
+  display: flex;
+  flex-direction: row;
+  padding: 12px;
+  border: 1px solid var(--gray-6);
+  border-radius: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.amountColumn {
+  display: flex;
+  max-width: 180px;
+  flex: 1 1 200px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.detailsColumn {
+  display: flex;
+  flex: 1 1 200px;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.recordType {
+  text-transform: capitalize;
+  border-bottom: 1px solid var(--gray-8);
+  width: 100%;
+  max-width: 140px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.detailField {
+  min-height: 32px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.sendTransactionModal {
+  display: flex;
+  flex-direction: column;
+}
+
+.actionsBtn {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+}
+
+.actionsMenu {
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+  cursor: pointer;
+}
+
+.actionsMenu > div {
+  height: 32px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 0px 12px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  transition: all ease-in-out 225ms;
+}
+
+.actionsMenu > div:hover {
+  background: var(--gray-5);
+  width: 100%;
+}
+
+.actionsMenu > div > svg {
+  width: 16px;
+  height: 16px;
+}
+.actionsMenu > div > label {
+  margin-left: 5px;
+  margin-top: 4px;
+}

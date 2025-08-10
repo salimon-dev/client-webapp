@@ -1,20 +1,22 @@
 import { Theme } from "@radix-ui/themes";
 import { useAtomValue } from "jotai";
-import { themeModeAtom } from "@providers/store";
 import Splash from "@components/Splash/Splash";
 import AuthRoutes from "./AuthRoutes";
 import GuestRoutes from "./GuestRoutes";
-import { useIsConnectedToNexus, useIsLoggedInToNexus } from "@network/hooks";
+import { themeModeAtom } from "@providers/theme";
+import { accessTokenAtom, bootstrapStateAtom } from "@providers/auth";
 
 export function Phases() {
-  const isConnectedToNexus = useIsConnectedToNexus();
-  const isLoggedIn = useIsLoggedInToNexus();
-
-  if (!isConnectedToNexus) {
+  const bootstrapState = useAtomValue(bootstrapStateAtom);
+  const accessToken = useAtomValue(accessTokenAtom);
+  if (bootstrapState === "init") {
     return <Splash status="connecting to nexus" />;
   }
+  if (bootstrapState === "loading") {
+    return <Splash status="authenticating" />;
+  }
 
-  if (isLoggedIn) {
+  if (accessToken) {
     return <AuthRoutes />;
   } else {
     return <GuestRoutes />;
@@ -24,7 +26,7 @@ export function Phases() {
 export default function App() {
   const theme = useAtomValue(themeModeAtom);
   return (
-    <Theme appearance={theme} accentColor="blue">
+    <Theme appearance={theme} accentColor="indigo">
       <Phases />
     </Theme>
   );

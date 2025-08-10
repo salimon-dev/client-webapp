@@ -1,0 +1,17 @@
+.container {
+  border: 1px solid var(--gray-5);
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 225ms;
+  flex: 1;
+  user-select: none;
+}
+.container:hover:not(.selected) {
+  background: var(--gray-3);
+}
+
+.selected {
+  background: var(--gray-5);
+}

@@ -1,6 +1,6 @@
 import Dialog from "@components/Dialog/Dialog";
-import { useProfile } from "@network/hooks";
-import { userRoleToString, userStatusToString } from "@network/specs";
+import { userStatusToString } from "@helpers/transformers";
+import { useProfile } from "@providers/auth";
 import { DataList } from "@radix-ui/themes";
 import { JSX } from "react";
 
@@ -16,10 +16,6 @@ export default function ProfileDialog({ children }: Props) {
         <DataList.Item align="center">
           <DataList.Label>username</DataList.Label>
           <DataList.Value>{profile.username}</DataList.Value>
-        </DataList.Item>
-        <DataList.Item align="center">
-          <DataList.Label>role</DataList.Label>
-          <DataList.Value>{userRoleToString(profile.role)}</DataList.Value>
         </DataList.Item>
         <DataList.Item align="center">
           <DataList.Label>status</DataList.Label>

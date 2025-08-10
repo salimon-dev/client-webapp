@@ -5,8 +5,8 @@ import { Route, Routes } from "react-router-dom";
 export default function AuthRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
       <Route path="/intro" element={<Intro />} />
+      <Route path="/*" element={<Home />} />
     </Routes>
   );
 }

@@ -1,6 +1,8 @@
 import { Theme } from "@specs/theme";
-import { store, themeModeAtom } from "./store";
+import { store } from "./store";
+import { atom } from "jotai";
 
+export const themeModeAtom = atom<Theme>(getDefaultTheme());
 export function changeTheme() {
   const theme = store.get(themeModeAtom);
   switch (theme) {

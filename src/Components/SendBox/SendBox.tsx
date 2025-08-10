@@ -1,26 +1,25 @@
 import SendIcon from "@icons/SendIcon";
-import { useInteractionState } from "@network/hooks";
-import { nexus } from "@providers/store";
 import { useRef, useState } from "react";
 import ActionButton from "./ActionButton";
 import Styles from "./styles.module.css";
-export default function SendBox() {
-  const ref = useRef<HTMLTextAreaElement>(null);
+import { updateSendBoxHeight } from "@providers/layout";
 
-  const interactionState = useInteractionState();
+interface IProps {
+  onSubmit: (body: string) => Promise<void>;
+  disabled?: boolean;
+}
+export default function SendBox({ onSubmit, disabled }: IProps) {
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(false);
   async function send() {
     if (!body) return;
-    if (body === "clear") {
-      await nexus.db.clearMessages();
-      setBody("");
-      return;
-    }
     try {
       setLoading(true);
       setBody("");
-      await nexus.interact({ body, from: "user", type: "plain" });
+      await onSubmit(body);
     } catch (err) {
       console.log(err);
     } finally {
@@ -29,34 +28,38 @@ export default function SendBox() {
   }
 
   return (
-    <div className={Styles.container}>
-      <div className={Styles.inputBox}>
-        <textarea
-          ref={ref}
-          autoFocus
-          value={body}
-          className={Styles.input}
-          onChange={(event) => {
-            setBody(event.target.value);
-            // adjust area size
-            if (!ref.current) return;
-            ref.current.style.height = Math.min(ref.current.scrollHeight, 60) + "px";
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) send();
-          }}
-          onPaste={(event) => {
-            console.log(event);
-          }}
-        />
-        <div className={Styles.actions}>
-          <div className={Styles.interactionStatus}>
-            {interactionState ? `${interactionState.name} is typing ...` : ""}
-          </div>
-          <ActionButton onClick={send}>
-            {loading ? <span>...</span> : <SendIcon style={{ width: "18px", height: "18px" }} />}
-          </ActionButton>
-        </div>
+    <div className={Styles.container} ref={containerRef}>
+      <textarea
+        ref={inputRef}
+        autoFocus
+        value={body}
+        className={Styles.input}
+        onChange={(event) => {
+          setBody(event.target.value);
+          // adjust area size
+          if (!inputRef.current) return;
+          if (!containerRef.current) return;
+          inputRef.current.style.height = "auto";
+          const h = Math.min(inputRef.current.scrollHeight - 13, 120);
+          inputRef.current.style.height = h + "px";
+          updateSendBoxHeight(h + 16);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && (event.metaKey || event.ctrlKey || !body.includes("\n"))) {
+            send();
+            event.preventDefault();
+          }
+        }}
+        onPaste={(event) => {
+          console.log(event);
+        }}
+        name="body"
+        placeholder="Type here ..."
+      />
+      <div className={Styles.actions}>
+        <ActionButton onClick={send} disabled={disabled}>
+          {loading ? <span>...</span> : <SendIcon style={{ width: "18px", height: "18px" }} />}
+        </ActionButton>
       </div>
     </div>
   );

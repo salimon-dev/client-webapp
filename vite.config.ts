@@ -31,7 +31,7 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "src/Components"),
       "@specs": path.resolve(__dirname, "src/Specs"),
       "@helpers": path.resolve(__dirname, "src/Helpers"),
-      "@network": path.resolve(__dirname, "src/Network"),
+      "@apis": path.resolve(__dirname, "src/APIs"),
     },
   },
 });

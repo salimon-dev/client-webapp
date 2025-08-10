@@ -7,7 +7,12 @@ import * as yup from "yup";
 import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
 import Heading from "./Heading";
-import { nexus } from "@providers/store";
+import { login } from "@apis/auth";
+import { storeAuthResponse } from "@providers/auth";
+import { AxiosError } from "axios";
+import { setupHttpClient } from "@providers/http";
+import { loadThreads } from "@providers/local";
+import { setupWebsocketAuthentication } from "@providers/websocket";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,12 +28,23 @@ export default function Login() {
     },
     onSubmit: async function (values) {
       setError(undefined);
-      const response = await nexus.login(values);
-      if (response.code === 200) return;
-      if (response.code === 400) {
-        formik.setErrors(response.errors);
-      } else if (response.code === 401) {
-        setError("username or password are incorred");
+      try {
+        const response = await login(values);
+        storeAuthResponse(response, true);
+        setupHttpClient();
+        loadThreads();
+        setupWebsocketAuthentication();
+      } catch (e) {
+        const error = e as AxiosError;
+        if (error.response) {
+          if (error.response.status === 401) {
+            setError("username or password are incorred");
+          } else {
+            setError("something went wrong");
+          }
+        } else {
+          setError("something went wrong");
+        }
       }
     },
   });

@@ -7,7 +7,12 @@ import * as yup from "yup";
 import { useState } from "react";
 import PasswordInput from "@components/Inputs/PasswordInput";
 import Heading from "./Heading";
-import { nexus } from "@providers/store";
+import { register } from "@apis/auth";
+import { storeAuthResponse } from "@providers/auth";
+import { setupHttpClient } from "@providers/http";
+import { AxiosError } from "axios";
+import { loadThreads } from "@providers/local";
+import { setupWebsocketAuthentication } from "@providers/websocket";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -25,12 +30,20 @@ export default function Register() {
     },
     onSubmit: async function (values) {
       setError(undefined);
-      const response = await nexus.register(values);
-      if (response.code === 200) {
+      try {
+        const response = await register(values);
+        storeAuthResponse(response, true);
+        setupHttpClient();
+        loadThreads();
+        setupWebsocketAuthentication();
         navigate("/");
-      }
-      if (response.code === 400) {
-        formik.setErrors(response.errors);
+      } catch (e) {
+        const error = e as AxiosError;
+        if (error.response) {
+          setError("something went wrong");
+        } else {
+          setError("something went wrong");
+        }
       }
     },
   });

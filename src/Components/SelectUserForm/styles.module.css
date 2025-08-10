@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  overflow: auto;
+  flex: 1;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  max-width: 430px;
+  flex: 1;
+  margin-top: 60px;
+  gap: 12px;
+}

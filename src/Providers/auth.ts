@@ -1,0 +1,112 @@
+import axios from "axios";
+import { store } from "./store";
+import { atom } from "jotai";
+import { IProfile } from "@specs/users";
+import { IAuthResponse } from "@specs/auth";
+import { setupHttpClient } from "./http";
+import { apiBaseUrlAtom, loadConfigs } from "./configs";
+import { loadThreads } from "./local";
+import { getProfile, rotate } from "@apis/auth";
+
+export const bootstrapStateAtom = atom<"init" | "loading" | "done">("init");
+export const accessTokenAtom = atom<string>();
+export const refreshTokenAtom = atom<string>();
+export const profileAtom = atom<IProfile>();
+
+export function storeAuthResponse(response: IAuthResponse, inLocalStorage = true) {
+  store.set(accessTokenAtom, response.access_token);
+  store.set(refreshTokenAtom, response.refresh_token);
+  store.set(profileAtom, response.profile);
+
+  if (inLocalStorage) {
+    localStorage.setItem("access_token", response.access_token);
+    localStorage.setItem("refresh_token", response.refresh_token);
+    localStorage.setItem("profile", JSON.stringify(response.profile));
+  }
+}
+
+export function loadAuthFromLocalStorage(): IAuthResponse | undefined {
+  const access_token = localStorage.getItem("access_token");
+  const refresh_token = localStorage.getItem("refresh_token");
+  const profile = localStorage.getItem("profile");
+
+  if (access_token && refresh_token && profile) {
+    return {
+      access_token,
+      refresh_token,
+      profile: JSON.parse(profile),
+    };
+  } else {
+    return undefined;
+  }
+}
+
+export async function validateAuthResponse(data: IAuthResponse): Promise<IProfile | undefined> {
+  try {
+    const baseURL = store.get(apiBaseUrlAtom);
+    return await axios
+      .get("/auth/profile", {
+        headers: { Authorization: "Bearer " + data.access_token },
+        baseURL,
+      })
+      .then((response) => response.data);
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
+}
+
+export async function rotateToken(data: IAuthResponse): Promise<IAuthResponse | undefined> {
+  try {
+    const response = await rotate(data.refresh_token);
+    return response;
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
+}
+
+/**
+ * loads auth tokens from local storage and validates them against the server.
+ */
+export async function loadAndValidateAuth() {
+  store.set(bootstrapStateAtom, "loading");
+  await loadConfigs();
+  setupHttpClient();
+  const storedAuthData = loadAuthFromLocalStorage();
+  if (!storedAuthData) {
+    store.set(bootstrapStateAtom, "done");
+    return;
+  }
+  const freshAuthData = await rotateToken(storedAuthData);
+  if (!freshAuthData) {
+    clearAuth();
+    store.set(bootstrapStateAtom, "done");
+    return;
+  } else {
+    storeAuthResponse(freshAuthData);
+    setupHttpClient();
+    loadThreads();
+    store.set(bootstrapStateAtom, "done");
+  }
+}
+
+export function clearAuth() {
+  store.set(accessTokenAtom, undefined);
+  store.set(refreshTokenAtom, undefined);
+  store.set(profileAtom, undefined);
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+  localStorage.removeItem("profile");
+  localStorage.removeItem("permissions");
+}
+
+export function useProfile() {
+  return store.get(profileAtom);
+}
+
+export async function updateProfile() {
+  const response = await getProfile();
+  localStorage.setItem("profile", JSON.stringify(response.user));
+  store.set(profileAtom, response.user);
+}

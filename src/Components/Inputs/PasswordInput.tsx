@@ -11,7 +11,7 @@ export default function PasswordInput(props: TextInputProps) {
       type={show ? "text" : "password"}
       rightSlot={
         <div
-          className={Styles.passwordBtn}
+          className={Styles.rightBtn}
           onClick={() => {
             setShow(!show);
           }}
